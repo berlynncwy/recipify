@@ -31,7 +31,10 @@ const customerSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Recipe"
     }
-});
+},
+    {
+        timestamps: true,
+    });
 const Customer = mongoose.model("Customer", customerSchema);
 
 export default Customer;
