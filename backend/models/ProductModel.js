@@ -10,13 +10,18 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    unit: {
+    brand: {
+        type: String,
+        required: true
+    },
+    unitDetails: {
         type: String,
         required: true
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
     image: {
         type: [String],
@@ -24,9 +29,17 @@ const productSchema = new mongoose.Schema({
     },
     stock: {
         type: Number,
+        required: true,
+        default: 0
+    },
+    category: {
+        type: [String],
         required: true
     }
-});
+},
+    {
+        timestamps: true
+    });
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;
