@@ -40,12 +40,22 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    ingredients: [{
-        name: String,
-        quantity: Number,
-        unit: String,
-        required: true
-    }],
+    ingredients: [
+        {
+            name: {
+                type: String,
+                required: true,
+            },
+            quantity: {
+                type: Number,
+                required: true,
+            },
+            unit: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
     instructions: {
         type: [String],
         required: true
@@ -59,11 +69,22 @@ const recipeSchema = new mongoose.Schema({
         required: true
     },
     nutritionFact: {
-        calories: Number,
-        carbohydrates: Number,
-        fat: Number,
-        protein: Number,
-        required: true
+        calories: {
+            type: Number,
+            required: true
+        },
+        carbohydrates: {
+            type: Number,
+            required: true
+        },
+        fat: {
+            type: Number,
+            required: true
+        },
+        protein: {
+            type: Number,
+            required: true
+        }
     },
     image: {
         type: [String],
@@ -80,6 +101,10 @@ const recipeSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0,
+    },
+    category: {
+        type: [String],
+        required: true
     },
 },
     {
