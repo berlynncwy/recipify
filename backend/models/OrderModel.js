@@ -51,8 +51,8 @@ const orderSchema = new mongoose.Schema({
     paymentResult: {
         id: { type: String },
         status: { type: String },
-        update_time: { type: String },
-        email_address: { type: String },
+        updateTime: { type: String },
+        emailAddress: { type: String },
     },
     itemsPrice: {
         type: Number,
@@ -65,6 +65,11 @@ const orderSchema = new mongoose.Schema({
         default: 0.0
     },
     discountPrice: {
+        type: Number,
+        required: true,
+        default: 0.0
+    },
+    totalPrice: {
         type: Number,
         required: true,
         default: 0.0
