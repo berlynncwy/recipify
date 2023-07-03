@@ -1,26 +1,51 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Dropdown } from "react-bootstrap";
 
 const Header = () => {
   return (
     <header className="border-b border-gray-100">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <button type="button" className="p-1 lg:hidden">
-            <svg
-              className="h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <Dropdown>
+            <Dropdown.Toggle
+              className=" lg:hidden hidden sm:flex sm:text-xs sm:font-bold sm:uppercase sm:tracking-wide sm:text-gray-500"
+              variant=""
+              id="dropdown-basic"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
+              Menu
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item as={Link} to="/recipes">
+                Recipes
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/products">
+                Products
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/favourites">
+                Favourites
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/cart">
+                Cart
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/orders">
+                Orders
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/account">
+                My Account
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/#">
+                My Recipes
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/#">
+                My Reviews
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to="/logout">
+                Log Out
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
 
           <a href="/" className="flex items-center gap-1">
             <svg
@@ -96,83 +121,71 @@ const Header = () => {
             aria-label="Global"
             className="hidden lg:flex lg:gap-4 lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide lg:text-gray-500"
           >
-            <a
-              href="/recipes"
+            <Link
+              to="/recipes"
               className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
             >
               Recipes
-            </a>
+            </Link>
 
-            <a
-              href="/products"
+            <Link
+              to="/products"
               className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
             >
               Products
-            </a>
+            </Link>
 
-            <a
-              href="/favourites"
+            <Link
+              to="/favourites"
               className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
             >
               Favourites
-            </a>
+            </Link>
 
-            <a
-              href="/orders"
+            <Link
+              to="/orders"
               className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
             >
               Orders
-            </a>
+            </Link>
+
+            <Link
+              to="/cart"
+              className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
+            >
+              Cart
+            </Link>
           </nav>
 
           <div className="flex items-center">
             <div className="flex items-center border-x border-gray-100">
-              <span className="border-e border-e-gray-100 ">
-                <a
-                  href="/cart"
-                  className="grid h-16 w-16 place-content-center border-b-4 border-transparent hover:border-green-700"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                    />
-                  </svg>
-
-                  <span className="sr-only"> Cart </span>
-                </a>
-              </span>
-
               <span className="">
-                <a
-                  href="/account"
-                  className="grid h-16 w-16 place-content-center border-b-4 border-transparent hover:border-green-700"
-                >
-                  <svg
-                    className="h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
+                <div>
+                  <Dropdown>
+                    <Dropdown.Toggle
+                      className="hidden lg:flex lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide lg:text-gray-500"
+                      variant="success"
+                      id="dropdown-basic"
+                    >
+                      Account
+                    </Dropdown.Toggle>
 
-                  <span className="sr-only"> Account </span>
-                </a>
+                    <Dropdown.Menu>
+                      <Dropdown.Item as={Link} to="/account">
+                        My Account
+                      </Dropdown.Item>
+                      <Dropdown.Item as={Link} to="/#">
+                        My Recipes
+                      </Dropdown.Item>
+                      <Dropdown.Item as={Link} to="/#">
+                        My Reviews
+                      </Dropdown.Item>
+                      <Dropdown.Item as={Link} to="/logout">
+                        Log Out
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
               </span>
             </div>
           </div>
