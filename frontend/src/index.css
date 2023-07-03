@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dropdown-toggle:after {
+    display: none !important;
+}
+
+.dropdown-menu {
+    font-size: small;
+    min-width: auto;
+}
+
+
+.rating span {
+    margin: 0.1rem;
+}
+
+.rating svg {
+    color: #FDCC0D;
+}
+
+.rating-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding-left: 0.5rem;
+}
+
+.recipe-title {
+    height: 2.5em;
+    /* Set a fixed height */
+    overflow: hidden;
+    /* Hide overflow content */
+    text-overflow: ellipsis;
+    /* Add ellipsis for long text */
+    white-space: nowrap;
+    /* Prevent wrapping */
+}
