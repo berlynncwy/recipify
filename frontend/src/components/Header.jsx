@@ -9,7 +9,7 @@ const Header = () => {
         <div className="flex items-center gap-3">
           <Dropdown>
             <Dropdown.Toggle
-              className=" lg:hidden hidden sm:flex sm:text-xs sm:font-bold sm:uppercase sm:tracking-wide sm:text-gray-500"
+              className=" lg:hidden xs:flex sm:text-xs sm:font-bold sm:uppercase sm:tracking-wide sm:text-gray-500"
               variant=""
               id="dropdown-basic"
             >
