@@ -9,11 +9,6 @@ const customerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
     dob: {
         type: Date
     },
