@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+    font-size: xx-large;
+    font-weight: bolder;
+    text-align: center;
+    padding: 10px;
+    border-bottom: rgb(233, 233, 233);
+    border-style: dashed;
+    margin-bottom: 20px;
+
+}
+
 .dropdown-toggle:after {
     display: none !important;
 }
@@ -26,8 +37,9 @@
     padding-left: 0.5rem;
 }
 
-.recipe-title {
-    height: 2.5em;
+.recipe-title,
+.product-title {
+    height: 2em;
     /* Set a fixed height */
     overflow: hidden;
     /* Hide overflow content */
@@ -35,4 +47,24 @@
     /* Add ellipsis for long text */
     white-space: nowrap;
     /* Prevent wrapping */
+    font-weight: bold;
+    font-size: large;
+}
+
+.product-title {
+    height: 1.5em;
+    margin: auto
+}
+
+.details-text {
+    font-size: small;
+}
+
+.error-msg {
+    font-size: small;
+    color: red;
+}
+
+img {
+    height: 250px;
 }
