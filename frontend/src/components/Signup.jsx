@@ -11,48 +11,55 @@ const Signup = () => {
   const [signupError, setSignupError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const validateCustomerDetails = (json) => {
-    // check if all fields are filled
-    if (
-      !json.email ||
-      !json.password ||
-      !json.firstName ||
-      !json.lastName ||
-      !json.dob ||
-      !json.mobile ||
-      !json.confirmPassword
-    ) {
-      // setSignupError(true);
-      setErrorMsg("All fields must be filled");
-    }
-    // check if its a valid email
-    if (!validator.isEmail(json.email)) {
-      // setSignupError(true);
-      setErrorMsg("Email is not valid");
-    }
-    // check if password is strong password
-    if (!validator.isStrongPassword(json.password)) {
-      // setSignupError(true);
-      setErrorMsg(
-        "Password should be at least 8 characters long and include a combination of uppercase and lowercase letters, numbers, and special characters for increased security "
-      );
-    }
-    // check if password and confirm password tally
-    if (json.confirmPassword != json.password) {
-      // setSignupError(true);
-      setErrorMsg("Password and confirm password is different");
-    }
-    return true;
-  };
-
   const submitHandler = (event) => {
     console.log(customerDetails);
     event.preventDefault();
+
+    const validateCustomerDetails = (json) => {
+      // check if all fields are filled
+      if (
+        !json.email ||
+        !json.password ||
+        !json.firstName ||
+        !json.lastName ||
+        !json.dob ||
+        !json.mobile ||
+        !json.confirmPassword
+      ) {
+        setErrorMsg("** All fields must be filled");
+        return true;
+      }
+      // check if its a valid email
+      if (!validator.isEmail(json.email)) {
+        setErrorMsg("** Email is invalid");
+        return true;
+      }
+      if (!validator.isMobilePhone(json.mobile)) {
+        setErrorMsg("** Mobile number is invalid");
+        return true;
+      }
+      // check if password is strong password
+      if (!validator.isStrongPassword(json.password)) {
+        setErrorMsg(
+          "** Weak password. Password should be 8 characters long and include a combination of uppercase and lowercase letters, numbers, and special characters."
+        );
+        return true;
+      }
+      // check if password and confirm password tally
+      if (json.confirmPassword != json.password) {
+        // setSignupError(true);
+        setErrorMsg("** Password and confirm password is different");
+        return true;
+      }
+      return false;
+    };
 
     // check if have all details
     if (!validateCustomerDetails(customerDetails)) {
       setSignupError(false);
       console.log("Fail");
+
+      // check if email is unique
       const email = customerDetails.email;
       fetch("api/user/getemail/?email=" + email, { method: "GET" })
         .then((res) => {
@@ -72,28 +79,28 @@ const Signup = () => {
         });
       console.log("Success");
 
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...customerDetails,
-        }),
-      };
-      fetch("api/user/signup", requestOptions)
-        .then((res) => {
-          return res.json();
-        })
-        .then((json) => {
-          console.log("======success=======");
-          console.log(json);
-        })
-        .catch((err) => {
-          console.log("======failure=======");
-          console.log(err);
-        });
+      if (signupError == false) {
+        const requestOptions = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...customerDetails,
+          }),
+        };
+        fetch("api/user/signup", requestOptions)
+          .then((res) => {
+            return res.json();
+          })
+          .then((json) => {
+            console.log("======success=======");
+            console.log(json);
+          })
+          .catch((err) => {
+            console.log("======failure=======");
+            console.log(err);
+          });
+      }
     }
-
-    // check if email is unique
   };
   const currentDate = new Date().toISOString().split("T")[0];
 
@@ -143,7 +150,7 @@ const Signup = () => {
 
   return (
     <>
-      <div>{{ signupError } && <p className="error-msg">** {errorMsg}</p>}</div>
+      <div>{{ signupError } && <p className="error-msg">{errorMsg}</p>}</div>
       <form onSubmit={submitHandler} className="mt-8 grid grid-cols-6 gap-6">
         <div className="col-span-6 sm:col-span-2">
           <label
