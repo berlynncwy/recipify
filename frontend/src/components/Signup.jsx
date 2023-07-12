@@ -57,7 +57,7 @@ const Signup = () => {
     // check if have all details
     if (!validateCustomerDetails(customerDetails)) {
       setSignupError(false);
-      console.log("Fail");
+      console.log("Pass");
 
       // check if email is unique
       const email = customerDetails.email;
