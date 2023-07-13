@@ -35,6 +35,11 @@ const productSchema = new mongoose.Schema({
     category: {
         type: [String],
         required: true
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Admin",
+        required: true
     }
 },
     {
