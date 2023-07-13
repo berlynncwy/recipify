@@ -15,7 +15,7 @@ function LoginPage() {
           <Login />
         </div>
       </div>
-      <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2">
+      <div className="relative h-64 w-full sm:h-96 lg:h-full lg:w-1/2 mb-4">
         <img
           alt="Welcome"
           src="https://images.unsplash.com/photo-1481931098730-318b6f776db0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2790&q=80"
