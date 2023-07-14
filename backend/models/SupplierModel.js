@@ -10,7 +10,7 @@ const supplierSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phone: {
+    mobile: {
         type: String,
         required: true,
         unique: true
@@ -34,11 +34,15 @@ const supplierSchema = new mongoose.Schema({
             required: true
         }
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Admin",
+        required: true
+    },
+},
+    {
+        timestamps: true
+    });
 const Supplier = mongoose.model("Supplier", supplierSchema);
 
 export default Supplier;
