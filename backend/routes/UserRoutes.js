@@ -58,6 +58,7 @@ router.post("/login", bodyParser.json(), asyncHandler(async (req, res) => {
   }
   try {
     const token = createToken(user._id);
+    console.log("token created");
     res.status(200).json({ email: user.email, token: token });
   } catch (error) {
     res.status(400).json({ error: error.message });

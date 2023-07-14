@@ -15,7 +15,6 @@ function Login() {
   };
 
   const submitHandler = (event) => {
-    console.log(email);
     event.preventDefault();
 
     if (email == "" || password == "") {
@@ -27,8 +26,8 @@ function Login() {
         body: JSON.stringify({ email, password }),
       })
         .then((res) => {
-          if (res.okay) {
-            res.json().then((msg) => "Logged in sucessfully");
+          if (res.ok) {
+            res.json().then((res) => console.log(res));
           } else {
             res.json().then((msg) => setErrorMsg(msg.error));
           }
