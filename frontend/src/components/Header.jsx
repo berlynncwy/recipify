@@ -47,7 +47,7 @@ const Header = () => {
             </Dropdown.Menu>
           </Dropdown>
 
-          <a href="/" className="flex items-center gap-1">
+          <Link to="/" className="flex items-center gap-1">
             <svg
               version="1.0"
               xmlns="http://www.w3.org/2000/svg"
@@ -114,7 +114,7 @@ const Header = () => {
               </g>
             </svg>
             <span className="font-mono font-medium text-3xl">Recipify</span>
-          </a>
+          </Link>
         </div>
         <div className="flex flex-1 items-center justify-end gap-8 ">
           <nav

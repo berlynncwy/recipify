@@ -63,6 +63,7 @@ const Signup = () => {
       const email = customerDetails.email;
       fetch("api/user/getemail/?email=" + email, { method: "GET" })
         .then((res) => {
+          console.log(res);
           return res.json();
         })
         .then((json) => {
