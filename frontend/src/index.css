@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
 h1 {
     font-size: xx-large;
     font-weight: bolder;
@@ -10,7 +19,15 @@ h1 {
     border-bottom: rgb(233, 233, 233);
     border-style: dashed;
     margin-bottom: 20px;
+}
 
+h2 {
+    font-size: xx-large;
+    font-weight: bolder;
+    text-align: center;
+    padding: 10px;
+    border-bottom: rgb(233, 233, 233);
+    margin-bottom: 10px;
 }
 
 .dropdown-toggle:after {
@@ -63,6 +80,35 @@ h1 {
 .error-msg {
     font-size: small;
     color: red;
+}
+
+.product-image {
+    height: 300px;
+    width: 300px;
+    margin: auto;
+
+}
+
+.product-detail {
+    min-height: 91vh;
+    margin: auto;
+}
+
+.product-status {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    padding: 1px 5px;
+
+}
+
+.product-l,
+.product-r {
+    padding: 5px;
+}
+
+.product-l {
+    text-align: right;
 }
 
 img {
