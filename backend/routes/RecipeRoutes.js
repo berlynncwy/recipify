@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 import asyncHandler from "../middleware/asyncHandler.js";
 import Recipe from "../models/RecipeModel.js";
+import Customer from "../models/CustomerModel.js";
 
 const router = express.Router();
 
@@ -19,7 +20,7 @@ router.get("/", asyncHandler(async (req, res) => {
 // get single recipe
 router.get("/:id", asyncHandler(async (req, res) => {
     const { id } = req.params;
-    console.log(id);
+    // console.log(id);
 
     // if invalid recipe id format
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -32,7 +33,14 @@ router.get("/:id", asyncHandler(async (req, res) => {
         res.status(404).json({ message: "Product not found" });
         return;
     }
-    res.status(200).json(recipe);
+    // const test = recipe.author.toString();
+    // console.log(test);
+    const author = await Customer.findById(recipe.author);
+
+    res.status(200).json({
+        recipe: recipe,
+        author: author
+    });
 }));
 
 export default router;

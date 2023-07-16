@@ -54,7 +54,11 @@ const SingleProductPage = () => {
       <div className=" flex justify-center">
         <Row className="place-content-center">
           <Col className=" flex flex-col justify-center">
-            <img src={product.image} alt="carrot" className="product-image" />
+            <img
+              src={product.image}
+              alt={product.name}
+              className="product-image"
+            />
           </Col>
           <Col
             as="div"

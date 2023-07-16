@@ -4,7 +4,10 @@ import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 
 const SingleRecipePage = () => {
-  const [recipe, setRecipe] = useState({ ingredients: [] });
+  const [recipe, setRecipe] = useState({
+    ingredients: [],
+    instructions: [],
+  });
   const [author, setAuthor] = useState({});
   const [createdDate, setCreatedDate] = useState("");
   const [updatedDate, setUpdatedDate] = useState("");
@@ -19,10 +22,12 @@ const SingleRecipePage = () => {
         setRecipe(res.recipe);
         setAuthor(res.author);
 
+        // format createdAt date
         let createdate = new Date(res.author.createdAt);
         createdate = createdate.toLocaleDateString();
         setCreatedDate(createdate);
 
+        // format updatedAr date
         let updatedate = new Date(res.author.updatedAt);
         updatedate = updatedate.toLocaleDateString();
         setUpdatedDate(updatedate);
@@ -43,7 +48,7 @@ const SingleRecipePage = () => {
       <div>
         <Row>
           <Col>
-            <h1>{recipe.title}</h1>
+            <h1 className="tracking-wide">{recipe.title}</h1>
             <p>{recipe.description}</p>
             <div className="m-3 flex ">
               <Rating
@@ -64,12 +69,45 @@ const SingleRecipePage = () => {
             </div>
             <div>
               <img src={recipe.image} alt={recipe.name} className="mt-4 mb-4" />
-              <p></p>
+              <div className="flex justify-center">
+                <p className="pl-2">Cook Time: {recipe.cookTime} minutes</p>
+                <p className="pl-2">Servings: {recipe.servings}</p>
+              </div>
+              <h3 className="tracking-wide text-left">Instructions</h3>
+              <p className="p-2 pb-4">
+                {recipe.instructions.map((instruction, index) => {
+                  return (
+                    <ol>
+                      {index + 1}. {instruction}
+                    </ol>
+                  );
+                })}
+              </p>
+            </div>
+            <div className="pb-3">
+              <h3 className="tracking-wide text-left">Nutrition Facts</h3>
+              <ul className="flex justify-between">
+                {recipe.nutritionFact != null && (
+                  <>
+                    <li className="pl-2">
+                      Calories: {recipe.nutritionFact.calories}
+                    </li>
+                    <li className="pl-2">
+                      Carbohydrates: {recipe.nutritionFact.carbohydrates}
+                    </li>
+                    <li className="pl-2">Fat: {recipe.nutritionFact.fat}</li>
+                    <li className="pl-2">
+                      Protein: {recipe.nutritionFact.protein}
+                    </li>
+                  </>
+                )}
+              </ul>
             </div>
           </Col>
+
           <Col>
             <div className="bg-gray-100 mt-5 p-3">
-              <h3 className="center">Ingredients needed</h3>
+              <h3 className="center tracking-wide">Ingredients needed</h3>
               <ul className="ingredient-list">
                 {recipe.ingredients.map((ingredient) => {
                   return (
@@ -79,6 +117,9 @@ const SingleRecipePage = () => {
                   );
                 })}
               </ul>
+            </div>
+            <div className="bg-gray-100 mt-3 p-3">
+              <h3 className="center tracking-wide">Add to Cart</h3>
             </div>
           </Col>
         </Row>
