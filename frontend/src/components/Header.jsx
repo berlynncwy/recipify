@@ -1,8 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Button } from "react-bootstrap";
+
+import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Header = () => {
+  const { user } = useAuthContext();
+  const { logout } = useLogout();
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <header className="border-b border-gray-100">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between sm:px-6 lg:px-8">
@@ -161,31 +170,59 @@ const Header = () => {
             <div className="flex items-center border-x border-gray-100">
               <span className="">
                 <div>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      className="hidden lg:flex lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide lg:text-gray-500"
-                      variant="success"
-                      id="dropdown-basic"
-                    >
-                      Account
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item as={Link} to="/account">
-                        My Account
-                      </Dropdown.Item>
-                      <Dropdown.Item as={Link} to="/#">
-                        My Recipes
-                      </Dropdown.Item>
-                      <Dropdown.Item as={Link} to="/#">
-                        My Reviews
-                      </Dropdown.Item>
-                      <Dropdown.Item as={Link} to="/logout">
-                        Log Out
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
+                  {!user && (
+                    <div className="flex items-center">
+                      <Button
+                        variant="success"
+                        as={Link}
+                        to="/login"
+                        className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs mr-3"
+                      >
+                        Login
+                      </Button>
+                      <Button
+                        variant="success"
+                        as={Link}
+                        to="/signup"
+                        className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs"
+                      >
+                        Sign up
+                      </Button>
+                    </div>
+                  )}
                 </div>
+                {user && (
+                  <div className="flex">
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        className="hidden lg:flex lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide mr-3"
+                        variant="outline-dark"
+                        id="dropdown-basic"
+                      >
+                        Account
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu className="text-right">
+                        <Dropdown.Item as={Link} to="/account">
+                          My Account
+                        </Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/#">
+                          My Recipes
+                        </Dropdown.Item>
+                        <Dropdown.Item as={Link} to="/#">
+                          My Reviews
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    <Button
+                      // variant="outline-light"
+                      onClick={handleLogout}
+                      className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs bg-green border-green-800 bg-green-800 hover:bg-green-950 hover:border-green-950"
+                    >
+                      Log out
+                    </Button>
+                  </div>
+                )}
               </span>
             </div>
           </div>
