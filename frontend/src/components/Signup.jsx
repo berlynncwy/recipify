@@ -4,18 +4,21 @@ import { useNavigate } from "react-router-dom";
 import validator from "validator";
 import "react-datepicker/dist/react-datepicker.css";
 
+import { useAuthContext } from "../hooks/useAuthContext";
 const Signup = () => {
   // customer details
   const [customerDetails, setCustomerDetails] = useState({});
   // signup error for when it fail
   const [signupError, setSignupError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const { dispatch } = useAuthContext();
 
   const submitHandler = (event) => {
     console.log(customerDetails);
     event.preventDefault();
 
     const validateCustomerDetails = (json) => {
+      setErrorMsg(false);
       // check if all fields are filled
       if (
         !json.email ||
@@ -61,6 +64,7 @@ const Signup = () => {
 
       // check if email is unique
       const email = customerDetails.email;
+      let emailExistAlready = false;
       fetch("api/user/getemail/?email=" + email, { method: "GET" })
         .then((res) => {
           console.log(res);
@@ -71,6 +75,7 @@ const Signup = () => {
             // good, go and create
           } else {
             setSignupError(true);
+            emailExistAlready = true;
             setErrorMsg("Email is already in use.");
           }
         })
@@ -80,7 +85,8 @@ const Signup = () => {
         });
       console.log("Success");
 
-      if (signupError == false) {
+      if (emailExistAlready == false) {
+        console.log("Imhere");
         const requestOptions = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -90,11 +96,20 @@ const Signup = () => {
         };
         fetch("api/user/signup", requestOptions)
           .then((res) => {
-            return res.json();
-          })
-          .then((json) => {
-            console.log("======success=======");
-            console.log(json);
+            // save user and email into local storage
+            if (res.ok) {
+              res.json().then((json) => {
+                console.log(json);
+                localStorage.setItem("user", JSON.stringify(json));
+                dispatch({ type: "login", payload: json });
+              });
+
+              console.log("======success=======");
+              console.log(res);
+            } else {
+              setSignupError(true);
+              setErrorMsg(res.error);
+            }
           })
           .catch((err) => {
             console.log("======failure=======");
