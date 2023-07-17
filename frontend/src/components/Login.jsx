@@ -2,10 +2,13 @@ import bodyParser from "body-parser";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { useAuthContext } from "../hooks/useAuthContext";
+
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const { dispatch } = useAuthContext();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -27,7 +30,11 @@ function Login() {
       })
         .then((res) => {
           if (res.ok) {
-            res.json().then((res) => console.log(res));
+            res.json().then((json) => {
+              console.log(json);
+              localStorage.setItem("user", JSON.stringify(json));
+              dispatch({ type: "login", payload: json });
+            });
           } else {
             res.json().then((msg) => setErrorMsg(msg.error));
           }
