@@ -126,13 +126,11 @@ router.post("/update-cart", bodyParser.json(), asyncHandler(async (req, res) => 
   try {
     const user = await User.findOne({ email: email });
     if (user) {
-      // const update = await User.update({ _id: user._id, "cart._id": user.cart.product._id },
-      //   { $set: { "cart.quantity": json.quantity } }
-      // );
-
       user.cart = json.cart;
       await user.save();
       console.log("Cart updated successfully");
+      res.status(200).json({ message: "Product added into cart successfully." });
+
     }
   } catch (error) {
     console.log(error);
