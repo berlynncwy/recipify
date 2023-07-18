@@ -18,6 +18,7 @@ export const AuthContextProvider = ({ children }) => {
     user: null,
   });
 
+  // check if user is in local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
 
