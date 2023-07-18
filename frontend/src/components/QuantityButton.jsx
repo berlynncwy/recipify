@@ -1,13 +1,13 @@
 import React from "react";
 
-const QuantityButton = ({ setValue, value, min, max }) => {
+const QuantityButton = ({ id, setValue, value, min, max }) => {
   const onIncrement = () => {
     setValue((old) => {
       if (max != null && old >= max) {
         return max;
       }
       return old + 1;
-    });
+    }, id);
   };
   const onDecrement = () => {
     setValue((old) => {
@@ -15,7 +15,7 @@ const QuantityButton = ({ setValue, value, min, max }) => {
         return min;
       }
       return old - 1;
-    });
+    }, id);
   };
   const onChange = (event) => {
     setValue((old) => {
@@ -27,7 +27,7 @@ const QuantityButton = ({ setValue, value, min, max }) => {
       } else {
         return num;
       }
-    });
+    }, id);
   };
 
   return (
