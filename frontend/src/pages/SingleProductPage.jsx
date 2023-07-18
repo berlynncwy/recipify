@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-
 import { useParams } from "react-router-dom";
+
+import { useAuthContext } from "../hooks/useAuthContext";
 import QuantityButton from "../components/QuantityButton";
 
 const SingleProductPage = () => {
+  const { user } = useAuthContext();
   const [product, setProduct] = useState({});
   const [productState, setProductState] = useState({});
   const [quantity, setQuantity] = useState(0);
 
   const { id } = useParams();
+
   const url = window.location.origin + "/api/products/" + id;
+  const cartUrl = window.location.origin + "/api/user/cart";
   //   console.log(window.location);
 
   useEffect(() => {
@@ -25,7 +29,7 @@ const SingleProductPage = () => {
           productState.colour = "#bd6868";
         } else if (res.stock < 10) {
           productState.stockStatus = "Low in stock";
-          productState.colour = "#998353";
+          productState.colour = "#c58060";
         } else {
           productState.stockStatus = "Available";
           productState.colour = "#68bd83";
@@ -39,11 +43,15 @@ const SingleProductPage = () => {
   const submitHandler = () => {
     console.log(quantity);
     console.log(product._id);
-
     // pass data inito cart
     // to do !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    useEffect(() => {
-      fetch("api/:userid/cart", { method: "POST" });
+    fetch(cartUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...product, quantity, user }),
     });
   };
 
@@ -95,7 +103,7 @@ const SingleProductPage = () => {
                   type="submit"
                   onClick={submitHandler}
                   className="mt-2 btn-outline-secondary btn-sm"
-                  disabled={quantity === 0 || product.stock < 0}
+                  disabled={quantity === 0 || product.stock <= 0}
                 >
                   Add to Cart
                 </Button>
