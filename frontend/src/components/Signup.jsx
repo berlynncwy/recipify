@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import validator from "validator";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { useAuthContext } from "../hooks/useAuthContext";
+
 const Signup = () => {
+  const navigate = useNavigate();
   // customer details
   const [customerDetails, setCustomerDetails] = useState({});
   // signup error for when it fail
@@ -102,6 +103,8 @@ const Signup = () => {
                 console.log(json);
                 localStorage.setItem("user", JSON.stringify(json));
                 dispatch({ type: "login", payload: json });
+                setCustomerDetails({});
+                navigate("/recipes");
               });
 
               console.log("======success=======");

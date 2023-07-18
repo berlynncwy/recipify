@@ -1,6 +1,6 @@
 import bodyParser from "body-parser";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 
@@ -16,6 +16,8 @@ function Login() {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
+  let navigate = useNavigate();
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -34,6 +36,10 @@ function Login() {
               console.log(json);
               localStorage.setItem("user", JSON.stringify(json));
               dispatch({ type: "login", payload: json });
+              // clear input
+              setEmail("");
+              setPassword("");
+              navigate("/recipes");
             });
           } else {
             res.json().then((msg) => setErrorMsg(msg.error));

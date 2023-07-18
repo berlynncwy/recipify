@@ -202,7 +202,7 @@ const Header = () => {
                         Account
                       </Dropdown.Toggle>
 
-                      <Dropdown.Menu className="text-right">
+                      <Dropdown.Menu>
                         <Dropdown.Item as={Link} to="/account">
                           My Account
                         </Dropdown.Item>
@@ -217,6 +217,8 @@ const Header = () => {
                     <Button
                       // variant="outline-light"
                       onClick={handleLogout}
+                      as={Link}
+                      to="/login"
                       className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs bg-green border-green-800 bg-green-800 hover:bg-green-950 hover:border-green-950"
                     >
                       Log out
