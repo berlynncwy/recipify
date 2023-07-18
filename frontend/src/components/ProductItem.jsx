@@ -16,9 +16,9 @@ const ProductItem = ({ _id, name, unitDetails, price, image }) => {
             <Card.Text as="div" className="">
               ${price}
             </Card.Text>
-            <Button variant="outline-dark" size="sm" className="m-1">
+            {/* <Button variant="outline-dark" size="sm" className="m-1">
               Add to cart
-            </Button>
+            </Button> */}
           </Card.Body>
         </Link>
       </Card>

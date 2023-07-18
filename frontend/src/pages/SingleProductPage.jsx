@@ -10,7 +10,6 @@ const SingleProductPage = () => {
   const [product, setProduct] = useState({});
   const [productState, setProductState] = useState({});
   const [quantity, setQuantity] = useState(0);
-
   const { id } = useParams();
 
   const url = window.location.origin + "/api/products/" + id;
@@ -43,8 +42,7 @@ const SingleProductPage = () => {
   const submitHandler = () => {
     console.log(quantity);
     console.log(product._id);
-    // pass data inito cart
-    // to do !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     fetch(cartUrl, {
       method: "POST",
       headers: {
@@ -52,9 +50,18 @@ const SingleProductPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...product, quantity, user }),
-    });
+    })
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((res) => console.log(res.message));
+        } else {
+          res.json().then((res) => console.log(res.error));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-
   let cssDetail = productState.colour;
 
   return (

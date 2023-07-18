@@ -14,8 +14,8 @@ const RecipeItem = ({
   return (
     <>
       <Card style={{ width: "18rem", height: "auto" }}>
-        <Link to={`/recipe/${_id}`}>
-          <Card.Img variant="top" src={image} />
+        <Link to={`/recipes/${_id}`}>
+          <Card.Img variant="top" src={image} className="recipe-image" />
           <Card.Body>
             <Card.Title as="div" className="recipe-title">
               {title}
