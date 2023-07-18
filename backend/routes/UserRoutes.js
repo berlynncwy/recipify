@@ -24,7 +24,7 @@ router.get('/', function (req, res, next) {
 router.get("/getemail", asyncHandler(async (req, res) => {
   console.log(req.query.email);
   const user = await User.findOne({ email: req.query.email });
-  res.json(user);
+  res.status(200).json(user);
 }));
 
 // user login
@@ -93,7 +93,7 @@ router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
   console.log("Recipe created!");
 }));
 
-//
+// add a product
 router.post("/cart", bodyParser.json(), asyncHandler(async (req, res) => {
   console.log(req.body);
   const json = req.body;
@@ -111,14 +111,33 @@ router.post("/cart", bodyParser.json(), asyncHandler(async (req, res) => {
       user.cart.push(item);
       await user.save();
       console.log("Product added to cart");
+      res.status(200).json({ message: "Product added into cart successfully." });
     }
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });
   }
-}
+}));
 
+router.post("/update-cart", bodyParser.json(), asyncHandler(async (req, res) => {
+  console.log(req.body);
+  const json = req.body;
+  const email = json.user.email;
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      // const update = await User.update({ _id: user._id, "cart._id": user.cart.product._id },
+      //   { $set: { "cart.quantity": json.quantity } }
+      // );
 
-));
+      user.cart = json.cart;
+      await user.save();
+      console.log("Cart updated successfully");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: error.message });
+  }
+}));
 
 export default router;
