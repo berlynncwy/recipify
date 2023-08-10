@@ -26,12 +26,26 @@ const IngredientComponent = () => {
 
   return (
     <>
+      <div className="flex justify-around ">
+        <Row>
+          <Col className="p-0 mb-2">
+            <label className="w-44 pl-3">Name</label>
+          </Col>
+          <Col className="p-0 mb-2">
+            <label className="w-44 pl-3">Quantity</label>
+          </Col>
+          <Col className="p-0">
+            <label className="w-44"></label>
+          </Col>
+        </Row>
+      </div>
+
       {ingredientList.map((ingredient, index) => (
         <div className="flex justify-around">
           <Row>
             <Col>
               <input
-                key={index}
+                key={index + "name"}
                 className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 placeholder="Carrot"
                 type="text"
@@ -42,7 +56,7 @@ const IngredientComponent = () => {
             </Col>
             <Col>
               <input
-                key={index}
+                key={index + "quantity"}
                 className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 placeholder="100g"
                 type="text"
