@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 
-const IngredientComponent = () => {
+const IngredientComponent = ({ onChange }) => {
   const [ingredientList, setIngredientList] = useState([
     { name: "", quantity: "" },
   ]);
 
-  const handleChange = (event, index) => {
+  const onIngredientChange = (event, index) => {
     const { name, value } = event.target;
-    const ingredient = [...ingredientList];
-    ingredient[index][name] = value;
-    setIngredientList(ingredient);
+    const newIngredients = [...ingredientList];
+    newIngredients[index][name] = value;
+    setIngredientList(newIngredients);
   };
 
   const handleAdd = () => {
@@ -23,6 +23,10 @@ const IngredientComponent = () => {
     deleteIngredient.splice(index, 1);
     setIngredientList(deleteIngredient);
   };
+
+  useEffect(() => {
+    onChange && onChange(ingredientList);
+  }, [ingredientList]);
 
   return (
     <>
@@ -41,28 +45,26 @@ const IngredientComponent = () => {
       </div>
 
       {ingredientList.map((ingredient, index) => (
-        <div className="flex justify-around">
+        <div className="flex justify-around" key={index}>
           <Row>
             <Col>
               <input
-                key={index + "name"}
                 className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 placeholder="Carrot"
                 type="text"
                 name="name"
                 value={ingredient.name}
-                onChange={(event) => handleChange(event, index)}
+                onChange={(event) => onIngredientChange(event, index)}
               ></input>
             </Col>
             <Col>
               <input
-                key={index + "quantity"}
                 className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 placeholder="100g"
                 type="text"
                 name="quantity"
                 value={ingredient.quantity}
-                onChange={(event) => handleChange(event, index)}
+                onChange={(event) => onIngredientChange(event, index)}
               ></input>
             </Col>
 
@@ -71,6 +73,7 @@ const IngredientComponent = () => {
                 className="btn-sm m-2 mb-4"
                 variant="outline-danger"
                 onClick={() => handleDelete(index)}
+                disabled={ingredientList.length == 1}
               >
                 Remove
               </Button>
