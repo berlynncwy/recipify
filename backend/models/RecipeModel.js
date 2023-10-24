@@ -54,7 +54,7 @@ const recipeSchema = new mongoose.Schema({
         },
     ],
     instructions: {
-        type: [String],
+        type: String,
         required: true
     },
     cookTime: {
@@ -74,7 +74,7 @@ const recipeSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
-        fat: {
+        fats: {
             type: Number,
             required: true
         },
@@ -99,10 +99,12 @@ const recipeSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
-    category: {
-        type: [String],
-        required: true
-    },
+    tag: [
+        {
+            type: String,
+            required: true
+        }
+    ],
 },
     {
         timestamps: true
