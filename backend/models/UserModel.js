@@ -50,6 +50,12 @@ const userSchema = new mongoose.Schema({
                 required: true
             },
         }],
+    favourites: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Recipe"
+        }
+    ],
 },
     {
         timestamps: true,

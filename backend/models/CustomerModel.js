@@ -21,11 +21,8 @@ const customerSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-    },
-    favourites: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Recipe"
     }
+
 },
     {
         timestamps: true,
