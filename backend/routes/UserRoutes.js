@@ -84,15 +84,6 @@ router.get("/:id", asyncHandler(async (req, res) => {
 // needs to be authenticated to create new recipe
 router.use(requireAuth);
 
-// create new recipe route
-router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
-  const json = req.body;
-  const recipe = new Recipe(json);
-  let saveRecipe = await recipe.save();
-  res.json(recipe);
-  console.log("Recipe created!");
-}));
-
 // add a product
 router.post("/cart", bodyParser.json(), asyncHandler(async (req, res) => {
   console.log(req.body);
@@ -138,4 +129,22 @@ router.post("/update-cart", bodyParser.json(), asyncHandler(async (req, res) => 
   }
 }));
 
+// router.post("/update-cart", bodyParser.json(), asyncHandler(async (req, res) => {
+//   console.log(req.body);
+//   const json = req.body;
+//   const email = json.user.email;
+//   try {
+//     const user = await User.findOne({ email: email });
+//     if (user) {
+//       user.cart = json.cart;
+//       await user.save();
+//       console.log("Cart updated successfully");
+//       res.status(200).json({ message: "Product added into cart successfully." });
+
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(400).json({ error: error.message });
+//   }
+// }));
 export default router;
