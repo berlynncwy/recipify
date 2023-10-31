@@ -21,10 +21,10 @@ import SignupPage from "./pages/SignupPage";
 import ProductPage from "./pages/ProductPage";
 import SingleProductPage from "./pages/SingleProductPage";
 import SingleRecipePage from "./pages/SingleRecipePage";
-import RecipeForm from "./components/RecipeForm";
 import { AuthContextProvider } from "./context/AuthContext";
 import OrderPage from "./pages/OrderPage";
 import FavouritePage from "./pages/FavouritePage";
+import NewRecipePage from "./pages/NewRecipePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,7 +40,8 @@ const router = createBrowserRouter(
       <Route path="/account" element={<MyAccount />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      <Route path="/newrecipe" element={<RecipeForm />} />
+      <Route path="/newrecipe" element={<NewRecipePage />} />
+
       <Route path="/*" element={<Navigate to="/error" replace />} />
       <Route path="/error" element={<ErrorPage />} />
     </Route>
