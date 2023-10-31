@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImageUploader = () => {
+const ImageUploader = ({ onImageUpload }) => {
   const [image, setImage] = useState();
   const [error, setError] = useState(null);
 
@@ -18,6 +18,7 @@ const ImageUploader = () => {
           console.log(reader.result);
           setImage(reader.result);
           setError(null);
+          onImageUpload(reader.result);
         };
 
         reader.onerror = (error) => {

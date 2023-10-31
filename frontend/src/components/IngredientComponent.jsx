@@ -11,6 +11,7 @@ const IngredientComponent = ({ onChange }) => {
     const newIngredients = [...ingredientList];
     newIngredients[index][name] = value;
     setIngredientList(newIngredients);
+    console.log(newIngredients);
   };
 
   const handleAdd = () => {

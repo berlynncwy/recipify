@@ -11,7 +11,6 @@ const RecipeForm = () => {
   const [recipe, setRecipe] = useState({
     title: "",
     description: "",
-    tag: "",
     instructions: "",
     cookTime: "",
     servings: "",
@@ -30,33 +29,45 @@ const RecipeForm = () => {
   const [recipeCreationError, setRecipeCreationError] = useState(false);
 
   const submitHandler = (event) => {
-    console.log(recipe, ingredients, imageData);
+    console.log(recipe, recipeTag, ingredients, imageData);
     event.preventDefault();
 
-    const validateRecipeDetails = (json) => {
+    const validateRecipeDetails = (
+      recipe,
+      recipeTag,
+      ingredients,
+      imageData
+    ) => {
       setErrorMsg(false);
 
       // check if all fields are filled
       if (
-        !json.title ||
-        !json.description ||
-        !json.tag ||
-        !json.instructions ||
-        !json.cookTime === "" ||
-        !json.servings === "" ||
-        !json.calories === "" ||
-        !json.carbohydrates === "" ||
-        !json.protein === "" ||
-        !json.fats === "" ||
-        !json.ingredients === ""
+        recipe.title == "" ||
+        recipe.description == "" ||
+        recipe.instructions == "" ||
+        recipe.cookTime == "" ||
+        recipe.servings == "" ||
+        recipeTag.length == 0 ||
+        imageData == null
       ) {
-        setErrorMsg("** All fields must be filled");
+        setErrorMsg("** All fields must be filled..");
+
+        console.warn("** All fields must be filled..");
         return false;
+      }
+
+      for (const { name, quantity } of ingredients) {
+        if (name == "" || quantity == "") {
+          setErrorMsg("** All fields must be filled");
+          console.warn("** All fields must be filled");
+          return false;
+        }
       }
       return true;
     };
 
-    if (!validateRecipeDetails(recipe)) {
+    const ok = validateRecipeDetails(recipe, recipeTag, ingredients, imageData);
+    if (ok) {
       setRecipeCreationError(false);
 
       const requestOptions = {
@@ -67,7 +78,7 @@ const RecipeForm = () => {
         },
         body: JSON.stringify({
           ...recipe,
-          imageData,
+          image: imageData,
           ingredients,
           tag: recipeTag,
           nutritionFact,
@@ -84,6 +95,8 @@ const RecipeForm = () => {
           console.log("=====error=====");
           console.log(err);
         });
+    } else {
+      setRecipeCreationError(true);
     }
   };
 
@@ -97,12 +110,6 @@ const RecipeForm = () => {
   const descriptionInputHandler = (event) => {
     setRecipe((prev) => {
       return { ...prev, description: event.target.value };
-    });
-    console.log(recipe);
-  };
-  const tagInputHandler = (event) => {
-    setRecipe((prev) => {
-      return { ...prev, tag: event.target.value };
     });
     console.log(recipe);
   };
