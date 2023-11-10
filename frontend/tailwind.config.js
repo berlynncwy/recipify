@@ -5,8 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        "abc": "#abcabc"
+      }
+    },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp')
+  ],
 }
 

@@ -2,17 +2,21 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useFav } from "../hooks/useFav";
 
 const SingleRecipePage = () => {
   const [recipe, setRecipe] = useState({
     ingredients: [],
-    instructions: [],
   });
+  const { user } = useAuthContext();
   const [author, setAuthor] = useState({});
   const [createdDate, setCreatedDate] = useState("");
   const [updatedDate, setUpdatedDate] = useState("");
   const { id } = useParams();
   const url = window.location.origin + "/api/recipes/" + id;
+
+  const { isFav, onFavToggle } = useFav();
 
   useEffect(() => {
     fetch(url)
@@ -50,15 +54,30 @@ const SingleRecipePage = () => {
           <Col>
             <h1 className="tracking-wide">{recipe.title}</h1>
             <p>{recipe.description}</p>
-            <div className="m-3 flex ">
-              <Rating
-                rating={recipe.rating}
-                noOfReviews={`${recipe.numReviews} ${review}`}
-              ></Rating>
-              <Button className="btn-sm ml-2 btn-outline-dark">
-                Add a review
-              </Button>
-              <Button className="btn-sm ml-2 btn-outline-danger">♡</Button>
+            <div className="m-3 flex">
+              <div className="flex flex-1">
+                <Rating
+                  rating={recipe.rating}
+                  noOfReviews={`${recipe.numReviews} ${review}`}
+                ></Rating>
+                {user && (
+                  <>
+                    <Button className="btn-sm ml-2 btn-outline-dark">
+                      Add a review
+                    </Button>
+                    <Button
+                      className="btn-sm ml-2 btn-outline-danger"
+                      onClick={() => {
+                        console.log("object");
+                        onFavToggle(id);
+                      }}
+                    >
+                      {isFav(id) ? "♥" : "♡"}
+                    </Button>
+                  </>
+                )}
+              </div>
+
               <p className="author">
                 Author: {author.firstName + " " + author.lastName}
                 <br></br>
@@ -74,14 +93,15 @@ const SingleRecipePage = () => {
                 <p className="pl-2">Servings: {recipe.servings}</p>
               </div>
               <h3 className="tracking-wide text-left">Instructions</h3>
-              <p className="p-2 pb-4">
-                {recipe.instructions.map((instruction, index) => {
+              <p className="p-2 pb-4 whitespace-pre-line recipe-instructions">
+                {recipe.instructions}
+                {/* {recipe.instructions.map((instruction, index) => {
                   return (
                     <ol>
                       {index + 1}. {instruction}
                     </ol>
                   );
-                })}
+                })} */}
               </p>
             </div>
             <div className="pb-3">
