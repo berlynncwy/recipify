@@ -54,7 +54,7 @@ router.use(requireAuth);
 router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
     const user = req.user;
     const json = req.body;
-    json.author = user._id;
+    json.author = user.customer;
     console.log(json);
 
     const recipe = new Recipe(json);
@@ -71,11 +71,16 @@ router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
 }));
 
 // add recipe to favourites
-router.put("/", asyncHandler(async (req, res) => {
+router.post("/favourites", bodyParser.json(), asyncHandler(async (req, res) => {
     try {
-        const recipe = await Recipe.findById(req.body.recipeID);
-        const user = await User.findById(req.body.userID);
-        user.favourites.push(recipe);
+        const user = req.user;
+        const id = req.body.recipeID;
+        const index = user.favourites.findIndex((fav) => fav == id);
+        if (index > -1) {
+            user.favourites.splice(index, 1);
+        } else {
+            user.favourites.push(id);
+        }
         await user.save();
         res.status(200).json({ favourites: user.favourites });
     } catch (err) {
@@ -86,7 +91,7 @@ router.put("/", asyncHandler(async (req, res) => {
 // get favourite recipes ids
 router.get("/favourites/ids", asyncHandler(async (req, res) => {
     try {
-        const user = await User.findById(req.body.userID);
+        const user = req.user;
         res.json({ favourites: user?.favourites });
     } catch (err) {
         res.status(400).json(err);
@@ -95,7 +100,7 @@ router.get("/favourites/ids", asyncHandler(async (req, res) => {
 
 router.get("/favourites", asyncHandler(async (req, res) => {
     try {
-        const user = await User.findById(req.body.userID);
+        const user = req.user;
         const favourites = await Recipe.find({
             _id: { $in: user.favourites },
         });
