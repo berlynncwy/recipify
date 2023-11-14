@@ -78,11 +78,9 @@ const CartPage = () => {
 
   return (
     <>
-      <div className="h-screen">
+      <div className="min-h-screen">
         <header className="text-center">
-          <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">
-            Your Cart
-          </h1>
+          <h1 className="">Your Cart</h1>
         </header>
         {cart.map((item) => {
           return (

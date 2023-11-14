@@ -13,9 +13,6 @@ const RecipeItem = ({
   favourite,
   onFavourite,
 }) => {
-  const [favourites, setFavourties] = useState([]);
-
-  const toggleSaveRecipes = (recipeId) => {};
   return (
     <>
       <div className="flex">

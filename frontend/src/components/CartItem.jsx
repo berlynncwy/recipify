@@ -38,7 +38,7 @@ const CartItem = ({
                   <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
                     <div>
                       <dt className="inline">Price: </dt>
-                      <dd className="inline">${price}</dd>
+                      <dd className="inline">${price.toFixed(2)}</dd>
                     </div>
                   </dl>
                   <QuantityButton

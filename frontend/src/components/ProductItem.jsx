@@ -14,7 +14,7 @@ const ProductItem = ({ _id, name, unitDetails, price, image }) => {
             </Card.Title>
             <Card.Text className="details-text">{unitDetails}</Card.Text>
             <Card.Text as="div" className="">
-              ${price}
+              ${price.toFixed(2)}
             </Card.Text>
             {/* <Button variant="outline-dark" size="sm" className="m-1">
               Add to cart

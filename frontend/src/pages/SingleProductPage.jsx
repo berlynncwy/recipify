@@ -9,7 +9,7 @@ const SingleProductPage = () => {
   const { user } = useAuthContext();
   const [product, setProduct] = useState({});
   const [productState, setProductState] = useState({});
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const { id } = useParams();
 
   const url = window.location.origin + "/api/products/" + id;
