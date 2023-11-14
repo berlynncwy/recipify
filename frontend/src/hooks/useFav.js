@@ -8,6 +8,7 @@ export const useFav = () => {
     const [favourites, setFav] = useState([]);
 
     useEffect(() => {
+        console.log("user:" + user);
         if (user == null) return;
 
         const requestOptions = {
@@ -16,13 +17,12 @@ export const useFav = () => {
                 Authorization: `Bearer ${user.token}`,
             },
         };
-        fetch("api/recipes/favourites/ids", requestOptions)
+        fetch(window.location.origin + "/api/recipes/favourites/ids", requestOptions)
             .then((res) => {
                 return res.json();
             })
             .then((json) => {
                 if (json.favourites != null) {
-                    console.log(json);
                     setFav(json.favourites);
                 }
             })
@@ -44,7 +44,7 @@ export const useFav = () => {
                 recipeID: id,
             }),
         };
-        fetch("/api/recipes/favourites", requestOptions)
+        fetch(window.location.origin + "/api/recipes/favourites", requestOptions)
             .then((res) => {
                 return res.json();
             })
@@ -61,6 +61,7 @@ export const useFav = () => {
 
     const favSet = useMemo(() => {
         const set = new Set();
+        console.log(favourites);
         for (const id of favourites) {
             set.add(id);
         }

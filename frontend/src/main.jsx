@@ -25,6 +25,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 import OrderPage from "./pages/OrderPage";
 import FavouritePage from "./pages/FavouritePage";
 import NewRecipePage from "./pages/NewRecipePage";
+import MyRecipePage from "./pages/MyRecipePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,7 +42,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/newrecipe" element={<NewRecipePage />} />
-
+      <Route path="/myrecipes" element={<MyRecipePage />} />
       <Route path="/*" element={<Navigate to="/error" replace />} />
       <Route path="/error" element={<ErrorPage />} />
     </Route>
