@@ -12,6 +12,8 @@ const Header = () => {
     logout();
   };
 
+  const isLoggedOut = user == null;
+
   return (
     <header className="border-b border-gray-100">
       <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between sm:px-6 lg:px-8">
@@ -44,10 +46,10 @@ const Header = () => {
               <Dropdown.Item as={Link} to="/account">
                 My Account
               </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/#">
+              <Dropdown.Item as={Link} to="/myrecipes">
                 My Recipes
               </Dropdown.Item>
-              <Dropdown.Item as={Link} to="/#">
+              <Dropdown.Item as={Link} to="/myreviews">
                 My Reviews
               </Dropdown.Item>
               <Dropdown.Item as={Link} to="/logout">
@@ -144,26 +146,32 @@ const Header = () => {
               Products
             </Link>
 
-            <Link
-              to="/favourites"
-              className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
-            >
-              Favourites
-            </Link>
+            {!isLoggedOut && (
+              <Link
+                to="/favourites"
+                className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
+              >
+                Favourites
+              </Link>
+            )}
 
-            <Link
-              to="/orders"
-              className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
-            >
-              Orders
-            </Link>
+            {!isLoggedOut && (
+              <Link
+                to="/orders"
+                className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
+              >
+                Orders
+              </Link>
+            )}
 
-            <Link
-              to="/cart"
-              className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
-            >
-              Cart
-            </Link>
+            {!isLoggedOut && (
+              <Link
+                to="/cart"
+                className="block h-16 border-b-4 border-transparent leading-[4rem] hover:border-current hover:text-green-700"
+              >
+                Cart
+              </Link>
+            )}
           </nav>
 
           <div className="flex items-center">
@@ -206,10 +214,10 @@ const Header = () => {
                         <Dropdown.Item as={Link} to="/account">
                           My Account
                         </Dropdown.Item>
-                        <Dropdown.Item as={Link} to="/#">
+                        <Dropdown.Item as={Link} to="/myrecipes">
                           My Recipes
                         </Dropdown.Item>
-                        <Dropdown.Item as={Link} to="/#">
+                        <Dropdown.Item as={Link} to="/myreviews">
                           My Reviews
                         </Dropdown.Item>
                       </Dropdown.Menu>
