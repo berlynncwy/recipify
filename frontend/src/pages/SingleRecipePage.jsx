@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFav } from "../hooks/useFav";
+import QuantityButton from "../components/QuantityButton";
+import { FaShoppingCart } from "react-icons/fa";
 
 const SingleRecipePage = () => {
   const [recipe, setRecipe] = useState({
@@ -11,12 +13,15 @@ const SingleRecipePage = () => {
   });
   const { user } = useAuthContext();
   const [author, setAuthor] = useState({});
-  const [createdDate, setCreatedDate] = useState("");
   const [updatedDate, setUpdatedDate] = useState("");
+  const [relevantProducts, setRelevantProducts] = useState([]);
   const { id } = useParams();
   const url = window.location.origin + "/api/recipes/" + id;
+  const cartUrl = window.location.origin + "/api/user/cart";
+  const relevantUrl = window.location.origin + "/api/products/relevant";
+  const [quantity, setQuantity] = useState(1);
 
-  const { isFav, onFavToggle } = useFav();
+  const { fav, isFav, onFavToggle } = useFav();
 
   useEffect(() => {
     fetch(url)
@@ -26,15 +31,25 @@ const SingleRecipePage = () => {
         setRecipe(res.recipe);
         setAuthor(res.author);
 
-        // format createdAt date
-        let createdate = new Date(res.author.createdAt);
-        createdate = createdate.toLocaleDateString();
-        setCreatedDate(createdate);
-
         // format updatedAr date
         let updatedate = new Date(res.author.updatedAt);
         updatedate = updatedate.toLocaleDateString();
         setUpdatedDate(updatedate);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    fetch(relevantUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ recipeId: id }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("testest");
+        console.log(res);
+        if (res.stock > 0) setRelevantProducts(res.relevantProducts);
       })
       .catch((error) => {
         console.log(error);
@@ -47,104 +62,161 @@ const SingleRecipePage = () => {
     review = "review";
   }
 
+  const submitHandler = (product) => {
+    console.log(quantity);
+    console.log(product);
+
+    fetch(cartUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...product, quantity, user }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          res.json().then((res) => console.log(res.message));
+          alert("Product has been added to cart.");
+        } else {
+          res.json().then((res) => console.log(res.error));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
-    <>
-      <div>
-        <Row>
-          <Col>
-            <h1 className="tracking-wide">{recipe.title}</h1>
-            <p>{recipe.description}</p>
-            <div className="m-3 flex">
-              <div className="flex flex-1">
-                <Rating
-                  rating={recipe.rating}
-                  noOfReviews={`${recipe.numReviews} ${review}`}
-                ></Rating>
-                {user && (
-                  <>
-                    <Button className="btn-sm ml-2 btn-outline-dark">
-                      Add a review
-                    </Button>
-                    <Button
-                      className="btn-sm ml-2 btn-outline-danger"
-                      onClick={() => {
-                        console.log("object");
-                        onFavToggle(id);
-                      }}
+    <div>
+      <Row>
+        <Col>
+          <h1 className="tracking-wide">{recipe.title}</h1>
+          <p>{recipe.description}</p>
+          <div className="m-3 flex">
+            <div className="flex flex-1">
+              <Rating
+                rating={recipe.rating}
+                noOfReviews={`${recipe.numReviews} ${review}`}
+              ></Rating>
+              {user && (
+                <>
+                  <Button className="btn-sm ml-2 btn-outline-dark">
+                    Add a review
+                  </Button>
+                  <Button
+                    className="btn-sm ml-2 btn-outline-danger"
+                    onClick={() => {
+                      console.log("object");
+                      onFavToggle(id);
+                    }}
+                  >
+                    {isFav(id) ? "♥" : "♡"}
+                  </Button>
+                </>
+              )}
+            </div>
+
+            <p className="author">
+              Author: {author.firstName + " " + author.lastName}
+              <br></br>
+              Updated: {updatedDate}
+            </p>
+          </div>
+          <div>
+            <Image
+              src={recipe.image}
+              alt={recipe.name}
+              className="mt-4 mb-4 border-1"
+            />
+            <div className="flex justify-center">
+              <p className="pl-2">Cook Time: {recipe.cookTime} minutes</p>
+              <p className="pl-2">Servings: {recipe.servings}</p>
+            </div>
+            <h3 className="tracking-wide text-left">Instructions</h3>
+            <p className="p-2 pb-4 whitespace-pre-line recipe-instructions">
+              {recipe.instructions}
+            </p>
+          </div>
+          <div className="pb-3">
+            <h3 className="tracking-wide text-left">Nutrition Facts</h3>
+            <ul className="flex justify-between">
+              {recipe.nutritionFact != null && (
+                <>
+                  <li className="pl-2">
+                    Calories: {recipe.nutritionFact.calories}
+                  </li>
+                  <li className="pl-2">
+                    Carbohydrates: {recipe.nutritionFact.carbohydrates}
+                  </li>
+                  <li className="pl-2">Fat: {recipe.nutritionFact.fat}</li>
+                  <li className="pl-2">
+                    Protein: {recipe.nutritionFact.protein}
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+        </Col>
+
+        <Col>
+          <div className="bg-gray-100 mt-5 p-3">
+            <h3 className="center tracking-wide">Ingredients needed</h3>
+            <ul className="ingredient-list">
+              {recipe.ingredients.map((ingredient) => {
+                return (
+                  <li key={ingredient._id}>
+                    {ingredient.name} {ingredient.quantity} {ingredient.unit}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          <div className="bg-gray-100 mt-3 p-3">
+            <h3 className="center tracking-wide">Add to Cart</h3>
+          </div>
+
+          <div className="flex-wrap flex">
+            {relevantProducts.map((product) => (
+              <div className="flex pt-2 pl-1 mr-2" key={product._id}>
+                <Image
+                  src={product.image}
+                  rounded
+                  className="w-40 h-40 border-1 mr-3"
+                />
+                <div className="flex-col">
+                  <div className="pr-5 recipe-title pt-2">{product.name}</div>
+                  <div className="details-text">{product.unitDetails}</div>
+                  <div className="details-text">
+                    ${product.price.toFixed(2)}
+                  </div>
+                  <div>
+                    <QuantityButton
+                      value={quantity}
+                      setValue={setQuantity}
+                      min={0}
+                      max={10}
+                    />
+                  </div>
+                  <div>
+                    <button
+                      className="cart-button btn-sm mt-1 flex"
+                      type="submit"
+                      onClick={() => submitHandler(product)}
+                      disabled={quantity === 0 || product.stock <= 0}
                     >
-                      {isFav(id) ? "♥" : "♡"}
-                    </Button>
-                  </>
-                )}
+                      <p className="align-self-center pr-1">Add to Cart</p>
+                      <FaShoppingCart className="align-self-center" />
+                    </button>
+                  </div>
+                </div>
               </div>
-
-              <p className="author">
-                Author: {author.firstName + " " + author.lastName}
-                <br></br>
-                Created: {createdDate}
-                <br></br>
-                Updated: {updatedDate}
-              </p>
-            </div>
-            <div>
-              <img src={recipe.image} alt={recipe.name} className="mt-4 mb-4" />
-              <div className="flex justify-center">
-                <p className="pl-2">Cook Time: {recipe.cookTime} minutes</p>
-                <p className="pl-2">Servings: {recipe.servings}</p>
-              </div>
-              <h3 className="tracking-wide text-left">Instructions</h3>
-              <p className="p-2 pb-4 whitespace-pre-line recipe-instructions">
-                {recipe.instructions}
-                {/* {recipe.instructions.map((instruction, index) => {
-                  return (
-                    <ol>
-                      {index + 1}. {instruction}
-                    </ol>
-                  );
-                })} */}
-              </p>
-            </div>
-            <div className="pb-3">
-              <h3 className="tracking-wide text-left">Nutrition Facts</h3>
-              <ul className="flex justify-between">
-                {recipe.nutritionFact != null && (
-                  <>
-                    <li className="pl-2">
-                      Calories: {recipe.nutritionFact.calories}
-                    </li>
-                    <li className="pl-2">
-                      Carbohydrates: {recipe.nutritionFact.carbohydrates}
-                    </li>
-                    <li className="pl-2">Fat: {recipe.nutritionFact.fat}</li>
-                    <li className="pl-2">
-                      Protein: {recipe.nutritionFact.protein}
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
-          </Col>
-
-          <Col>
-            <div className="bg-gray-100 mt-5 p-3">
-              <h3 className="center tracking-wide">Ingredients needed</h3>
-              <ul className="ingredient-list">
-                {recipe.ingredients.map((ingredient) => {
-                  return (
-                    <li>
-                      {ingredient.name} {ingredient.quantity} {ingredient.unit}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <div className="bg-gray-100 mt-3 p-3">
-              <h3 className="center tracking-wide">Add to Cart</h3>
-            </div>
-          </Col>
-        </Row>
-      </div>
-    </>
+            ))}
+          </div>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
