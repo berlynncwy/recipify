@@ -17,11 +17,7 @@ import { useFav } from "../hooks/useFav";
 const RecipePage = () => {
   const [recipe, setRecipe] = useState([]);
   const { user } = useAuthContext();
-
-  // const [favourites, setFav] = useState([]);
-
   const { id: recipeId } = useParams();
-
   const { isFav, onFavToggle } = useFav();
 
   useEffect(() => {

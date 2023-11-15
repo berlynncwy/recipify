@@ -23,7 +23,7 @@ const RecipeItem = ({
               <Card.Title as="div" className="recipe-title">
                 {title}
               </Card.Title>
-              <Card.Text className="mb-2 min-h-[120px] h-[120px]">
+              <Card.Text as="div" className="mb-2 min-h-[120px] h-[120px]">
                 <p className="line-clamp-5">{description}</p>
               </Card.Text>
               <Card.Text as="div" className="flex justify-items-center w-full">

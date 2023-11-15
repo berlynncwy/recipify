@@ -51,17 +51,22 @@ const CartPage = () => {
     submitCart(newCart);
   };
 
-  const changeQuantityHandler = (getValue, id) => {
-    const newCart = cart.map((item) => {
-      if (item._id == id) {
-        const oldQuantity = item.quantity;
-        const newQuantity = +getValue(oldQuantity);
-        item.quantity = newQuantity;
-        console.log(newQuantity);
-      }
-      return item;
-    });
-    submitCart(newCart);
+  const changeQuantityHandler = (value, id) => {
+    if (value == 0) {
+      const newCart = cart.filter((item) => {
+        return item._id != id;
+      });
+      submitCart(newCart);
+    } else {
+      const newCart = cart.map((item) => {
+        if (item._id == id) {
+          item.quantity = value;
+          console.log(value);
+        }
+        return item;
+      });
+      submitCart(newCart);
+    }
   };
 
   return (
@@ -72,18 +77,16 @@ const CartPage = () => {
         </header>
         {cart.map((item) => {
           return (
-            <>
-              <CartItem
-                key={item._id}
-                id={item._id}
-                name={item.name}
-                quantity={item.quantity}
-                price={item.price}
-                image={item.image}
-                onDelete={deleteHandler}
-                onQuantityChange={changeQuantityHandler}
-              />
-            </>
+            <CartItem
+              key={item._id}
+              id={item._id}
+              name={item.name}
+              quantity={item.quantity}
+              price={item.price}
+              image={item.image}
+              onDelete={deleteHandler}
+              onQuantityChange={changeQuantityHandler}
+            />
           );
         })}
       </div>

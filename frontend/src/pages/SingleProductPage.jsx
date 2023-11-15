@@ -54,6 +54,7 @@ const SingleProductPage = () => {
       .then((res) => {
         if (res.ok) {
           res.json().then((res) => console.log(res.message));
+          alert("Product has been added to cart.");
         } else {
           res.json().then((res) => console.log(res.error));
         }
@@ -65,61 +66,59 @@ const SingleProductPage = () => {
   let cssDetail = productState.colour;
 
   return (
-    <>
-      <div className=" flex justify-center">
-        <Row className="place-content-center">
-          <Col className=" flex flex-col justify-center">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="product-image"
-            />
-          </Col>
-          <Col
-            as="div"
-            className="product-detail max-w-full flex flex-col justify-center"
-          >
-            <h2>{product.name}</h2>
-            {/* <div className="text-"> */}
-            <Row>
-              <Col className="">
-                <p className="product-l">Brand :</p>
-                <p className="product-l">Unit :</p>
-                <p className="product-l">Price :</p>
-                <p className="product-l">Stock status :</p>
-                <p className="product-l">Quantity :</p>
-              </Col>
+    <div className=" flex justify-center">
+      <Row className="place-content-center">
+        <Col className=" flex flex-col justify-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="product-image"
+          />
+        </Col>
+        <Col
+          as="div"
+          className="product-detail max-w-full flex flex-col justify-center"
+        >
+          <h2>{product.name}</h2>
+          {/* <div className="text-"> */}
+          <Row>
+            <Col className="">
+              <p className="product-l">Brand :</p>
+              <p className="product-l">Unit :</p>
+              <p className="product-l">Price :</p>
+              <p className="product-l">Stock status :</p>
+              <p className="product-l">Quantity :</p>
+            </Col>
 
-              <Col className="">
-                <p className="product-r">{product.brand}</p>
-                <p className="product-r">{product.unitDetails}</p>
-                <p className="product-r">${product.price}</p>
-                <p
-                  style={{ background: cssDetail }}
-                  className="product-status inline-block "
-                >
-                  {productState.stockStatus}
-                </p>
-                <QuantityButton
-                  value={quantity}
-                  setValue={setQuantity}
-                  min={0}
-                  max={10}
-                />
-                <Button
-                  type="submit"
-                  onClick={submitHandler}
-                  className="mt-2 btn-outline-secondary btn-sm"
-                  disabled={quantity === 0 || product.stock <= 0}
-                >
-                  Add to Cart
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </div>
-    </>
+            <Col className="">
+              <p className="product-r">{product.brand}</p>
+              <p className="product-r">{product.unitDetails}</p>
+              <p className="product-r">${product.price}</p>
+              <p
+                style={{ background: cssDetail }}
+                className="product-status inline-block "
+              >
+                {productState.stockStatus}
+              </p>
+              <QuantityButton
+                value={quantity}
+                setValue={setQuantity}
+                min={0}
+                max={10}
+              />
+              <Button
+                type="submit"
+                onClick={submitHandler}
+                className="mt-2 btn-outline-dark btn-sm"
+                disabled={quantity === 0 || product.stock <= 0}
+              >
+                Add to Cart
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
