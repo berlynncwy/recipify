@@ -84,22 +84,32 @@ router.get("/:id", asyncHandler(async (req, res) => {
 // needs to be authenticated to create new recipe
 router.use(requireAuth);
 
-// add a product
+// add product to cart
 router.post("/cart", bodyParser.json(), asyncHandler(async (req, res) => {
   console.log(req.body);
   const json = req.body;
   const email = json.user.email;
   try {
     const user = await User.findOne({ email: email });
+    console.log(user);
     if (user) {
-      const item = {
-        name: json.name,
-        quantity: json.quantity,
-        image: json.image,
-        price: json.price,
-        product: json._id
-      };
-      user.cart.push(item);
+      const foundIndex = user.cart.findIndex((item) => item.product == json._id);
+
+      if (foundIndex > -1) {
+        user.cart[foundIndex].quantity += json.quantity;
+        // todo
+      } else {
+        const item = {
+          name: json.name,
+          quantity: json.quantity,
+          image: json.image,
+          price: json.price,
+          product: json._id
+        };
+        user.cart.push(item);
+      }
+
+
       await user.save();
       console.log("Product added to cart");
       res.status(200).json({ message: "Product added into cart successfully." });

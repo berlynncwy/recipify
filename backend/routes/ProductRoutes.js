@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 
 import asyncHandler from "../middleware/asyncHandler.js";
 import Product from "../models/ProductModel.js";
+import Recipe from "../models/RecipeModel.js";
+import bodyParser from "body-parser";
 
 const router = express.Router();
 
@@ -14,6 +16,38 @@ router.get("/", asyncHandler(async (req, res) => {
         return;
     }
     res.status(200).json(products);
+}));
+
+// get relevant products
+router.post("/relevant", bodyParser.json(), asyncHandler(async (req, res) => {
+    const json = req.body;
+    if (!mongoose.Types.ObjectId.isValid(json.recipeId)) {
+        res.status(404).json("Invalid recipe ID");
+        return;
+    }
+
+    const recipe = await Recipe.findById(json.recipeId);
+    if (recipe == null) {
+        res.status(404).json("No recipe found");
+        return;
+    }
+
+    // we want to put all our product names into a map so is easier to 
+    // find and retrieve our product
+    const productMap = new Map();
+    const products = await Product.find({});
+    products.forEach(product => {
+        productMap.set(product.name.toLowerCase(), product);
+    });
+
+    const relevantProducts = [];
+    recipe.ingredients.map(ingredient => ingredient.name.toLowerCase()).forEach((name) => {
+        if (productMap.has(name)) {
+            relevantProducts.push(productMap.get(name));
+        }
+    });
+
+    res.status(200).json({ "relevantProducts": relevantProducts });
 }));
 
 // get a single product

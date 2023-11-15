@@ -70,6 +70,19 @@ router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
     console.log("Recipe created!");
 }));
 
+router.get("myrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
+    try {
+        const user = req.user;
+        const recipes = await Recipe.find({ author: { $in: user } });
+        res.status(200).json({ recipes });
+    } catch (err) {
+
+    }
+
+
+
+}));
+
 // add recipe to favourites
 router.post("/favourites", bodyParser.json(), asyncHandler(async (req, res) => {
     try {
@@ -90,6 +103,7 @@ router.post("/favourites", bodyParser.json(), asyncHandler(async (req, res) => {
 
 // get favourite recipes ids
 router.get("/favourites/ids", asyncHandler(async (req, res) => {
+    console.log("test 1");
     try {
         const user = req.user;
         res.json({ favourites: user?.favourites });
@@ -98,16 +112,22 @@ router.get("/favourites/ids", asyncHandler(async (req, res) => {
     }
 }));
 
-router.get("/favourites", asyncHandler(async (req, res) => {
+router.get("/favourites/recipes", asyncHandler(async (req, res) => {
+    console.log("test 2");
     try {
         const user = req.user;
-        const favourites = await Recipe.find({
+        const favouriteRecipes = await Recipe.find({
             _id: { $in: user.favourites },
         });
-        res.status(200).json({ favourites });
+        console.log(favouriteRecipes);
+        res.status(200).json({ favouriteRecipes: favouriteRecipes });
     } catch (err) {
         res.status(400).json(err);
     }
 }));
+
+{
+    "favourites";
+}
 
 export default router;
