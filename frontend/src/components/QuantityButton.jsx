@@ -2,32 +2,20 @@ import React from "react";
 
 const QuantityButton = ({ id, setValue, value, min, max }) => {
   const onIncrement = () => {
-    setValue((old) => {
-      if (max != null && old >= max) {
-        return max;
-      }
-      return old + 1;
-    }, id);
+    setValue(max != null && value >= max ? max : value + 1, id);
   };
   const onDecrement = () => {
-    setValue((old) => {
-      if (min != null && old <= min) {
-        return min;
-      }
-      return old - 1;
-    }, id);
+    setValue(min != null && value <= min ? min : value - 1, id);
   };
   const onChange = (event) => {
-    setValue((old) => {
-      const num = +event.target.value;
-      if (min != null && num <= min) {
-        return min;
-      } else if (max != null && num >= max) {
-        return max;
-      } else {
-        return num;
-      }
-    }, id);
+    let num = +event.target.value;
+
+    if (min != null && num <= min) {
+      num = min;
+    } else if (max != null && num >= max) {
+      num = max;
+    }
+    setValue(num, id);
   };
 
   return (
