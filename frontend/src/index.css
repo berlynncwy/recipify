@@ -267,3 +267,39 @@ label {
     box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
     color: #202124;
 }
+
+.button {
+    background-color: #dcddde;
+    border: 1px solid #dcddde;
+    border-radius: 4px;
+    color: #3c4043;
+    cursor: pointer;
+    font-family: arial, sans-serif;
+    font-size: 14px;
+    height: 36px;
+    line-height: 27px;
+    min-width: 54px;
+    padding: 0 16px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: pre;
+}
+
+.button:hover {
+    border-color: #c6c7c8;
+    box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+    color: #202124;
+}
+
+.delete-btn {
+    background-color: #febec2;
+    border: 1px solid #febec2;
+}
+
+.delete-btn:hover {
+    border-color: #cb8a8f;
+    box-shadow: #8b5a5e15;
+    color: #202124;
+}
