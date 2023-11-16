@@ -23,7 +23,7 @@ router.get("/", asyncHandler(async (req, res) => {
 // get single recipe
 router.get("/:id", asyncHandler(async (req, res) => {
     const { id } = req.params;
-    // console.log(id);
+    console.log(id);
 
     // if invalid recipe id format
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -51,7 +51,7 @@ router.get("/:id", asyncHandler(async (req, res) => {
 router.use(requireAuth);
 
 // create new recipe route
-router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
+router.post("/newrecipe", asyncHandler(async (req, res) => {
     const user = req.user;
     const json = req.body;
     json.author = user.customer;
@@ -59,10 +59,15 @@ router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
 
     const recipe = new Recipe(json);
     console.log(recipe);
-    let saveRecipe = await recipe.save();
-
-    if (!saveRecipe) {
-        res.status(400).json({ message: "Something went wrong. Please try again" });
+    try {
+        let saveRecipe = await recipe.save();
+        if (!saveRecipe) {
+            res.status(400).json({ message: "Something went wrong. Please try again" });
+            return;
+        }
+    } catch (e) {
+        console.log("object");
+        res.status(500).json({ message: "Something went wrong. Please try again" });
         return;
     }
 
@@ -70,12 +75,16 @@ router.post("/newrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
     console.log("Recipe created!");
 }));
 
-router.get("myrecipe", bodyParser.json(), asyncHandler(async (req, res) => {
+router.get("/my/recipes", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("my recipes");
     try {
-        const user = req.user;
+        const user = req.user.customer;
         const recipes = await Recipe.find({ author: { $in: user } });
+        console.log("recipes------------------");
+        console.log(recipes);
         res.status(200).json({ recipes });
     } catch (err) {
+
 
     }
 
@@ -126,8 +135,6 @@ router.get("/favourites/recipes", asyncHandler(async (req, res) => {
     }
 }));
 
-{
-    "favourites";
-}
+
 
 export default router;

@@ -13,13 +13,15 @@ import RecipeRoutes from "./routes/RecipeRoutes.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
 import AdminRoutes from "./routes/AdminRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
+import bodyParser from 'body-parser';
 
 connectDB(); // connect to database
 const app = express();
 const port = process.env.PORT;
 
-
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.text({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
 app.get("/", (req, res) => {
   res.send("API is running");
