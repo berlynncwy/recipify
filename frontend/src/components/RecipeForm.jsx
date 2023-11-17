@@ -6,34 +6,43 @@ import IngredientComponent from "./IngredientComponent";
 import TagComponent from "./TagComponent";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const RecipeForm = () => {
-    const { user } = useAuthContext();
-    const [recipe, setRecipe] = useState({
-        title: "",
-        description: "",
-        instructions: "",
-        cookTime: "",
-        servings: "",
-        author: "",
-    });
-    const [recipeTag, setRecipeTag] = useState([]);
-    const [nutritionFact, setNutritionFact] = useState({
-        calories: 0,
-        carbohydrates: 0,
-        fats: 0,
-        protein: 0,
-    });
-    const [ingredients, setIngredients] = useState([]);
-    const [imageData, setImageData] = useState(null);
+const RecipeForm = ({ recipe, onSubmit }) => {
+    const [recipeDetails, setRecipeDetails] = useState(
+        recipe
+            ? recipe
+            : {
+                  title: "",
+                  description: "",
+                  instructions: "",
+                  cookTime: "",
+                  servings: "",
+                  author: "",
+              }
+    );
+    const [recipeTag, setRecipeTag] = useState(recipe ? recipe.tag : []);
+    const [nutritionFact, setNutritionFact] = useState(
+        recipe
+            ? recipe.nutritionFact
+            : {
+                  calories: 0,
+                  carbohydrates: 0,
+                  fats: 0,
+                  protein: 0,
+              }
+    );
+    const [ingredients, setIngredients] = useState(
+        recipe ? recipe.ingredients : [{ name: "", quantity: "" }]
+    );
+    const [imageData, setImageData] = useState(recipe ? recipe.image : null);
     const [errorMsg, setErrorMsg] = useState("");
     const [recipeCreationError, setRecipeCreationError] = useState(false);
 
     const submitHandler = (event) => {
-        console.log(recipe, recipeTag, ingredients, imageData);
+        console.log(recipeDetails, recipeTag, ingredients, imageData);
         event.preventDefault();
 
         const validateRecipeDetails = (
-            recipe,
+            recipeDetails,
             recipeTag,
             ingredients,
             imageData
@@ -42,11 +51,11 @@ const RecipeForm = () => {
 
             // check if all fields are filled
             if (
-                recipe.title == "" ||
-                recipe.description == "" ||
-                recipe.instructions == "" ||
-                recipe.cookTime == "" ||
-                recipe.servings == "" ||
+                recipeDetails.title == "" ||
+                recipeDetails.description == "" ||
+                recipeDetails.instructions == "" ||
+                recipeDetails.cookTime == "" ||
+                recipeDetails.servings == "" ||
                 recipeTag.length == 0 ||
                 imageData == null
             ) {
@@ -67,44 +76,22 @@ const RecipeForm = () => {
         };
 
         const ok = validateRecipeDetails(
-            recipe,
+            recipeDetails,
             recipeTag,
             ingredients,
             imageData
         );
         if (ok) {
-            setRecipeCreationError(false);
-            const body = JSON.stringify({
-                ...recipe,
+            const newRecipe = {
+                ...recipeDetails,
                 image: imageData,
                 ingredients,
                 tag: recipeTag,
                 nutritionFact,
-            });
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${user.token}`,
-                },
-                body: body,
             };
-            console.log(body);
 
-            fetch(
-                window.location.origin + "/api/recipes/newrecipe",
-                requestOptions
-            )
-                .then((res) => {
-                    if (res.ok) {
-                        alert("Recipe created.");
-                    } else {
-                    }
-                })
-                .catch((err) => {
-                    console.log("=====error=====");
-                    console.log(err);
-                });
+            onSubmit && onSubmit(newRecipe);
+            setRecipeCreationError(false);
         } else {
             setRecipeCreationError(true);
         }
@@ -112,34 +99,34 @@ const RecipeForm = () => {
 
     // input handlers
     const titleInputHandler = (event) => {
-        setRecipe((prev) => {
+        setRecipeDetails((prev) => {
             return { ...prev, title: event.target.value };
         });
-        console.log(recipe);
+        console.log(recipeDetails);
     };
     const descriptionInputHandler = (event) => {
-        setRecipe((prev) => {
+        setRecipeDetails((prev) => {
             return { ...prev, description: event.target.value };
         });
-        console.log(recipe);
+        console.log(recipeDetails);
     };
     const instructionInputHandler = (event) => {
-        setRecipe((prev) => {
+        setRecipeDetails((prev) => {
             return { ...prev, instructions: event.target.value };
         });
-        console.log(recipe);
+        console.log(recipeDetails);
     };
     const cookingTimeInputHandler = (event) => {
-        setRecipe((prev) => {
+        setRecipeDetails((prev) => {
             return { ...prev, cookTime: event.target.value };
         });
-        console.log(recipe);
+        console.log(recipeDetails);
     };
     const servingInputHandler = (event) => {
-        setRecipe((prev) => {
+        setRecipeDetails((prev) => {
             return { ...prev, servings: event.target.value };
         });
-        console.log(recipe);
+        console.log(recipeDetails);
     };
     const caloriesInputHandler = (event) => {
         setNutritionFact((prev) => {
@@ -189,7 +176,7 @@ const RecipeForm = () => {
                         className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                         type="text"
                         required
-                        value={recipe.title}
+                        value={recipeDetails.title}
                         onChange={titleInputHandler}
                     ></input>
                     <label>Description</label>
@@ -197,28 +184,35 @@ const RecipeForm = () => {
                         className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                         type="text"
                         required
-                        value={recipe.description}
+                        value={recipeDetails.description}
                         onChange={descriptionInputHandler}
                     ></input>
                     <label>Tag(s)</label>
-                    <TagComponent onTagsChange={handleTagsChange} />
+                    <TagComponent
+                        tags={recipeTag}
+                        onTagsChange={handleTagsChange}
+                    />
                     <label>Instructions</label>
                     <textarea
                         className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                         type="textarea"
                         required
                         rows="10"
-                        value={recipe.instructions}
+                        value={recipeDetails.instructions}
                         onChange={instructionInputHandler}
                     ></textarea>
 
-                    <ImageUploader onImageUpload={handleImageUpload} />
+                    <ImageUploader
+                        image={imageData}
+                        onImageUpload={handleImageUpload}
+                    />
                 </div>
 
                 <div className="col-span-6 sm:col-span-1">
                     <h3>Ingredients</h3>
 
                     <IngredientComponent
+                        ingredients={ingredients}
                         onChange={(ingredients) => setIngredients(ingredients)}
                     />
 
@@ -231,7 +225,7 @@ const RecipeForm = () => {
                                 className="p-2 border-1 mt-1 mb-3 w-80% rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                                 type="number"
                                 required
-                                value={recipe.cookTime}
+                                value={recipeDetails.cookTime}
                                 onChange={cookingTimeInputHandler}
                             ></input>
                         </div>
@@ -241,7 +235,7 @@ const RecipeForm = () => {
                                 className="p-2 border-1 mt-1 mb-3 w-80% rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                                 type="number"
                                 required
-                                value={recipe.servings}
+                                value={recipeDetails.servings}
                                 onChange={servingInputHandler}
                             ></input>
                         </div>
@@ -255,7 +249,7 @@ const RecipeForm = () => {
                                     className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                                     type="number"
                                     required
-                                    value={recipe.calories}
+                                    value={nutritionFact.calories}
                                     onChange={caloriesInputHandler}
                                 ></input>
                             </Col>
@@ -265,7 +259,7 @@ const RecipeForm = () => {
                                     className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                                     type="number"
                                     required
-                                    value={recipe.carbohydrates}
+                                    value={nutritionFact.carbohydrates}
                                     onChange={carbsInputHandler}
                                 ></input>
                             </Col>
@@ -275,7 +269,7 @@ const RecipeForm = () => {
                                     className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                                     type="number"
                                     required
-                                    value={recipe.protein}
+                                    value={nutritionFact.protein}
                                     onChange={proteinInputHandler}
                                 ></input>
                             </Col>
@@ -285,7 +279,7 @@ const RecipeForm = () => {
                                     className="p-2 border-1 mt-1 mb-3 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                                     type="number"
                                     required
-                                    value={recipe.fats}
+                                    value={nutritionFact.fats}
                                     onChange={fatsInputHandler}
                                 ></input>
                             </Col>
