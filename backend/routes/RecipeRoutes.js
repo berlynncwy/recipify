@@ -23,7 +23,7 @@ router.get("/", asyncHandler(async (req, res) => {
 // get single recipe
 router.get("/:id", asyncHandler(async (req, res) => {
     const { id } = req.params;
-    console.log(id);
+    console.log("recipe id: " + id);
 
     // if invalid recipe id format
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -84,12 +84,33 @@ router.get("/my/recipes", bodyParser.json(), asyncHandler(async (req, res) => {
         console.log(recipes);
         res.status(200).json({ recipes });
     } catch (err) {
-
-
+        res.status(400).json(err);
     }
+}));
 
+router.post("/edit/:id", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("recipe edit");
+    try {
+        console.log(req.body);
+        const updated = req.body;
+        await Recipe.findByIdAndUpdate(updated._id, updated);
+        res.status(200).json("Recipe successfully updated.");
+    } catch (err) {
+        console.warn(err);
+        res.status(400).json(err);
+    }
+}));
 
-
+router.delete("/:id", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("removing recipes ------");
+    const { id } = req.params;
+    try {
+        await Recipe.deleteOne({ _id: id });
+        res.status(200).json("Recipe successfully removed.");
+    } catch (err) {
+        res.status(400).json(err);
+    }
+    console.log(id);
 }));
 
 // add recipe to favourites
