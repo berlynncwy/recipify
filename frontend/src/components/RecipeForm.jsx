@@ -177,7 +177,6 @@ const RecipeForm = () => {
 
     return (
         <div className="min-h-screen max-h-full ">
-            <h1>Add a new recipe</h1>
             <div>
                 {{ recipeCreationError } && (
                     <p className="text-danger">{errorMsg}</p>
