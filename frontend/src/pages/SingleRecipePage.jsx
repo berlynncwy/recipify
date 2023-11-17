@@ -10,6 +10,8 @@ import { FaShoppingCart } from "react-icons/fa";
 const SingleRecipePage = () => {
     const [recipe, setRecipe] = useState({
         ingredients: [],
+        tag: [],
+        image: [],
     });
     const { user } = useAuthContext();
     const [author, setAuthor] = useState({});
@@ -137,6 +139,20 @@ const SingleRecipePage = () => {
                                 Servings: {recipe.servings}
                             </p>
                         </div>
+                        <div className="p-2">
+                            <p className="font-semibold underline">Tags </p>
+                            <div className="flex">
+                                {recipe.tag.map((tag) => {
+                                    return (
+                                        <div className="bg-blue-100 mr-2 ">
+                                            <p className="flex pl-1 pr-1 tracking-wide">
+                                                {tag.toLowerCase()}
+                                            </p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                         <h3 className="tracking-wide text-left">
                             Instructions
                         </h3>
@@ -160,7 +176,7 @@ const SingleRecipePage = () => {
                                         {recipe.nutritionFact.carbohydrates}
                                     </li>
                                     <li className="pl-2 font-semibold">
-                                        Fat: {recipe.nutritionFact.fat}
+                                        Fat: {recipe.nutritionFact.fats}
                                     </li>
                                     <li className="pl-2 font-semibold">
                                         Protein: {recipe.nutritionFact.protein}

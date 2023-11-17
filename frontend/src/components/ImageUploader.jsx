@@ -1,54 +1,56 @@
 import React, { useState } from "react";
 
-const ImageUploader = ({ onImageUpload }) => {
-  const [image, setImage] = useState();
-  const [error, setError] = useState(null);
+const ImageUploader = ({ image: imageData, onImageUpload }) => {
+    const [image, setImage] = useState(imageData || null);
+    const [error, setError] = useState(null);
 
-  const handleChange = (event) => {
-    const selectedFile = event.target.files[0];
+    const handleChange = (event) => {
+        const selectedFile = event.target.files[0];
 
-    if (selectedFile) {
-      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+        if (selectedFile) {
+            const maxSize = 5 * 1024 * 1024; // 5MB in bytes
 
-      if (selectedFile.size <= maxSize) {
-        const reader = new FileReader();
-        reader.readAsDataURL(selectedFile);
+            if (selectedFile.size <= maxSize) {
+                const reader = new FileReader();
+                reader.readAsDataURL(selectedFile);
 
-        reader.onload = () => {
-          console.log(reader.result);
-          setImage(reader.result);
-          setError(null);
-          onImageUpload(reader.result);
-        };
+                reader.onload = () => {
+                    console.log(reader.result);
+                    setImage(reader.result);
+                    setError(null);
+                    onImageUpload(reader.result);
+                };
 
-        reader.onerror = (error) => {
-          console.log("Error: ", error);
-          setError("Error reading the file.");
-          setImage(null);
-        };
-      } else {
-        setError("Image size exceeds 5MB. Please choose a smaller image.");
-        setImage(null);
-        event.target.value = null; // Clear the file input
-      }
-    }
-  };
+                reader.onerror = (error) => {
+                    console.log("Error: ", error);
+                    setError("Error reading the file.");
+                    setImage(null);
+                };
+            } else {
+                setError(
+                    "Image size exceeds 5MB. Please choose a smaller image."
+                );
+                setImage(null);
+                event.target.value = null; // Clear the file input
+            }
+        }
+    };
 
-  return (
-    <>
-      <div>
-        <label>Upload Image</label>
-        <input
-          type="file"
-          accept=".jpeg, .png, .jpg"
-          onChange={handleChange}
-          className="mb-4"
-        ></input>
-        {error && <p className="text-danger">{error}</p>}
-        {image && <img src={image} alt="Uploaded" />}
-      </div>
-    </>
-  );
+    return (
+        <>
+            <div>
+                <label>Upload Image</label>
+                <input
+                    type="file"
+                    accept=".jpeg, .png, .jpg"
+                    onChange={handleChange}
+                    className="mb-4"
+                ></input>
+                {error && <p className="text-danger">{error}</p>}
+                {image && <img src={image} alt="Uploaded" />}
+            </div>
+        </>
+    );
 };
 
 export default ImageUploader;

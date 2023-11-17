@@ -8,7 +8,6 @@ export const useFav = () => {
     const [favourites, setFav] = useState([]);
 
     useEffect(() => {
-        console.log("user:" + user);
         if (user == null) return;
 
         const requestOptions = {
