@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Dropdown } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import QuantityButton from "../components/QuantityButton";
@@ -39,31 +39,37 @@ const SingleProductPage = () => {
             });
     }, []);
 
+    let cssDetail = productState.colour;
+    let navigate = useNavigate();
+
     const submitHandler = () => {
         console.log(quantity);
         console.log(product._id);
 
-        fetch(cartUrl, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ...product, quantity, user }),
-        })
-            .then((res) => {
-                if (res.ok) {
-                    res.json().then((res) => console.log(res.message));
-                    alert("Product has been added to cart.");
-                } else {
-                    res.json().then((res) => console.log(res.error));
-                }
+        if (user == null) {
+            navigate("/login");
+        } else {
+            fetch(cartUrl, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ ...product, quantity, user }),
             })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((res) => {
+                    if (res.ok) {
+                        res.json().then((res) => console.log(res.message));
+                        alert("Product has been added to cart.");
+                    } else {
+                        res.json().then((res) => console.log(res.error));
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     };
-    let cssDetail = productState.colour;
 
     return (
         <div className=" flex justify-center">
@@ -109,7 +115,7 @@ const SingleProductPage = () => {
                                 value={quantity}
                                 setValue={setQuantity}
                                 min={0}
-                                max={10}
+                                max={product.stock}
                             />
                             <Button
                                 type="submit"
