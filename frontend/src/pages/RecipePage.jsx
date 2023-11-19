@@ -33,13 +33,11 @@ const RecipePage = () => {
             });
     }, [recipeId]);
 
-    // const recipes = recipe.find((r) => r._id === recipeId);
-    // console.log(recipes);
     return (
         <>
             <h1>Recipes</h1>
             <Container>
-                <Row className="gap-5 justify-center mb-5">
+                <Row className="gap-y-11 justify-center mb-5">
                     {recipe.map(
                         ({
                             _id,
