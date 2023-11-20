@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
-
 import ImageUploader from "./ImageUploader";
 import IngredientComponent from "./IngredientComponent";
 import TagComponent from "./TagComponent";
@@ -187,7 +186,7 @@ const RecipeForm = ({ recipe, onSubmit }) => {
                         value={recipeDetails.description}
                         onChange={descriptionInputHandler}
                     ></input>
-                    <label>Tag(s)</label>
+                    <label className="mb-1">Tag(s)</label>
                     <TagComponent
                         tags={recipeTag}
                         onTagsChange={handleTagsChange}

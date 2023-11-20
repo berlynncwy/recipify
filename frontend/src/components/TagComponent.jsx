@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import { ImCross } from "react-icons/im";
 
 const TagComponent = ({ tags: tag, onTagsChange }) => {
     const [tagInput, setTagInput] = useState("");
@@ -50,19 +51,19 @@ const TagComponent = ({ tags: tag, onTagsChange }) => {
                 </Button>
             </div>
 
-            <div>
+            <div className="flex mb-3">
                 {tags.map((tag, index) => (
-                    <span key={index} className="tag">
-                        {tag}{" "}
-                        <Button
-                            className="btn-sm m-1 mb-4 mt-2"
-                            variant="outline-danger"
+                    <span
+                        key={index}
+                        className="text-sm flex border-1 rounded pl-1 pr-1 mr-1"
+                    >
+                        {tag}
+                        <ImCross
+                            className="m-1 text-red-700"
                             type="button"
                             onClick={() => handleTagRemove(tag)}
                             onKeyDown={handleKeyPress}
-                        >
-                            x
-                        </Button>
+                        />
                     </span>
                 ))}
             </div>

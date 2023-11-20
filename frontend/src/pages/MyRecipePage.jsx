@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { Image } from "react-bootstrap";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Image, Button } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
 const MyRecipePage = () => {
     const { user } = useAuthContext();
@@ -58,8 +58,17 @@ const MyRecipePage = () => {
     };
 
     return (
-        <div className="">
-            <h1>My Recipe Page</h1>
+        <div>
+            <div className="flex-col justify-center flex">
+                <h1>My Recipe Page</h1>
+                <Button
+                    as={Link}
+                    to="/newrecipe"
+                    className="button create-recipe align-self-center w-50 pt-1 mb-3 bg-white text-lg font-bold tracking-wider"
+                >
+                    Create a new recipe
+                </Button>
+            </div>
             <div className="h-fullscreen flex flex-wrap justify-center">
                 {recipes.map((recipe) => {
                     let updatedate = new Date(recipe.updatedAt);
@@ -74,7 +83,7 @@ const MyRecipePage = () => {
                                 />
                             </div>
 
-                            <div className="ml-1 mr-10 pt-2 font-medium tracking-wide  ">
+                            <div className="ml-1 mr-10 pt-2 font-medium">
                                 Title: {recipe.title}
                                 <br></br>
                                 Updated on: {updatedate}

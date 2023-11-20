@@ -303,3 +303,56 @@ label {
     box-shadow: #8b5a5e15;
     color: #202124;
 }
+
+.create-recipe {
+    font-size: medium;
+    letter-spacing: 0.1em;
+
+}
+
+.checkout {
+    background-color: #d8d8d8;
+    font-size: medium;
+    font-weight: bold;
+    padding: 10px;
+    padding-top: 4px;
+    padding-bottom: 6px;
+    margin: auto;
+    height: 36px;
+}
+
+.payment-status-btn {
+    background-color: #fff;
+    border: 1px solid #d5d9d9;
+    border-radius: 6px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    box-sizing: border-box;
+    color: #0f1111;
+    cursor: pointer;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 10px 0 11px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    width: auto;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    height: auto;
+}
+
+.payment-status-btn:hover {
+    background-color: #f7fafa;
+}
+
+.payment-status-btn:focus {
+    border-color: #008296;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    outline: 0;
+}

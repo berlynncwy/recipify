@@ -140,11 +140,13 @@ const SingleRecipePage = () => {
                             </p>
                         </div>
                         <div className="p-2">
-                            <p className="font-semibold underline">Tags </p>
-                            <div className="flex">
+                            <p className="font-semibold underline mb-1">
+                                Tags{" "}
+                            </p>
+                            <div className="flex" key={recipe._id}>
                                 {recipe.tag.map((tag) => {
                                     return (
-                                        <div className="bg-blue-100 mr-2 ">
+                                        <div className="bg-blue-100 mr-2 rounded pl-1 pr-1">
                                             <p className="flex pl-1 pr-1 tracking-wide">
                                                 {tag.toLowerCase()}
                                             </p>
