@@ -65,8 +65,8 @@ router.post("/newrecipe", asyncHandler(async (req, res) => {
             res.status(400).json({ message: "Something went wrong. Please try again" });
             return;
         }
-    } catch (e) {
-        console.log("object");
+    } catch (err) {
+        console.warn(err);
         res.status(500).json({ message: "Something went wrong. Please try again" });
         return;
     }

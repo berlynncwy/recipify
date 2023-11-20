@@ -139,22 +139,4 @@ router.post("/update-cart", bodyParser.json(), asyncHandler(async (req, res) => 
   }
 }));
 
-// router.post("/update-cart", bodyParser.json(), asyncHandler(async (req, res) => {
-//   console.log(req.body);
-//   const json = req.body;
-//   const email = json.user.email;
-//   try {
-//     const user = await User.findOne({ email: email });
-//     if (user) {
-//       user.cart = json.cart;
-//       await user.save();
-//       console.log("Cart updated successfully");
-//       res.status(200).json({ message: "Product added into cart successfully." });
-
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).json({ error: error.message });
-//   }
-// }));
 export default router;

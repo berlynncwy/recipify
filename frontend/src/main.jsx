@@ -27,6 +27,7 @@ import FavouritePage from "./pages/FavouritePage";
 import NewRecipePage from "./pages/NewRecipePage";
 import MyRecipePage from "./pages/MyRecipePage";
 import EditRecipePage from "./pages/EditRecipePage.jsx";
+import SingleOrderPage from "./pages/SingleOrderPage.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -45,6 +46,7 @@ const router = createBrowserRouter(
             <Route path="/newrecipe" element={<NewRecipePage />} />
             <Route path="/myrecipes" element={<MyRecipePage />} />
             <Route path="/recipes/edit/:id" element={<EditRecipePage />} />
+            <Route path="/orders/:id" element={<SingleOrderPage />} />
             <Route path="/*" element={<Navigate to="/error" replace />} />
             <Route path="/error" element={<ErrorPage />} />
         </Route>

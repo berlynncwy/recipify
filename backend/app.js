@@ -12,8 +12,8 @@ import UserRoutes from './routes/UserRoutes.js';
 import RecipeRoutes from "./routes/RecipeRoutes.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
 import AdminRoutes from "./routes/AdminRoutes.js";
+import PaymentRoutes from "./routes/PaymentRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
-import bodyParser from 'body-parser';
 
 connectDB(); // connect to database
 const app = express();
@@ -27,10 +27,12 @@ app.get("/", (req, res) => {
   res.send("API is running");
 });
 
+
 app.use("/api/recipes", RecipeRoutes);
 app.use("/api/user", UserRoutes);
 app.use("/api/products", ProductRoutes);
 app.use("/api/admin", AdminRoutes);
+app.use("/api/payment", PaymentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -6,6 +6,10 @@ const orderSchema = new mongoose.Schema({
         ref: "Customer",
         required: true
     },
+    session: {
+        type: String,
+        required: true
+    },
     items: [
         {
             name: {
@@ -16,75 +20,75 @@ const orderSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
-            image: {
+            image: [{
                 type: String,
                 required: true
-            },
+            }],
             price: {
                 type: Number,
                 required: true
             },
-            products: {
+            product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Product",
                 required: true
             },
         }],
-    shippingAddress: {
-        street: {
-            type: String,
-            required: true
-        },
-        unitNo: {
-            type: String,
-            required: true
-        },
-        postalCode: {
-            type: String,
-            required: true
-        }
-    },
-    paymentMethod: {
-        type: String,
-        required: true,
-    },
-    paymentResult: {
-        id: { type: String },
-        status: { type: String },
-        updateTime: { type: String },
-        emailAddress: { type: String },
-    },
-    itemsPrice: {
-        type: Number,
-        required: true,
-        default: 0.0
-    },
-    shippingPrice: {
-        type: Number,
-        required: true,
-        default: 0.0
-    },
-    discountPrice: {
-        type: Number,
-        required: true,
-        default: 0.0
-    },
-    totalPrice: {
-        type: Number,
-        required: true,
-        default: 0.0
-    },
-    statusDetails: {
-        status: {
-            type: String,
-            enum: ["pending", "processing", "out for delivery", "completed", "cancelled"],
-            default: "pending"
-        },
-        time: {
-            type: Date,
-            required: true
-        },
-    },
+    // shippingAddress: {
+    //     street: {
+    //         type: String,
+    //         required: true
+    //     },
+    //     unitNo: {
+    //         type: String,
+    //         required: true
+    //     },
+    //     postalCode: {
+    //         type: String,
+    //         required: true
+    //     }
+    // },
+    // paymentMethod: {
+    //     type: String,
+    //     required: true,
+    // },
+    // paymentResult: {
+    //     id: { type: String },
+    //     status: { type: String },
+    //     updateTime: { type: String },
+    //     emailAddress: { type: String },
+    // },
+    // itemsPrice: {
+    //     type: Number,
+    //     required: true,
+    //     default: 0.0
+    // },
+    // shippingPrice: {
+    //     type: Number,
+    //     required: true,
+    //     default: 0.0
+    // },
+    // discountPrice: {
+    //     type: Number,
+    //     required: true,
+    //     default: 0.0
+    // },
+    // totalPrice: {
+    //     type: Number,
+    //     required: true,
+    //     default: 0.0
+    // },
+    // statusDetails: {
+    //     status: {
+    //         type: String,
+    //         enum: ["pending", "processing", "out for delivery", "completed", "cancelled"],
+    //         default: "pending"
+    //     },
+    //     time: {
+    //         type: Date,
+    //         required: true
+    //     },
+    // },
 },
     {
         timestamps: true
