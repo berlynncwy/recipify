@@ -58,8 +58,8 @@ const MyRecipePage = () => {
     };
 
     return (
-        <div>
-            <div className="flex-col justify-center flex">
+        <div className="flex-col justify-center flex">
+            <div className="flex-col flex">
                 <h1>My Recipe Page</h1>
                 <Button
                     as={Link}
@@ -69,7 +69,7 @@ const MyRecipePage = () => {
                     Create a new recipe
                 </Button>
             </div>
-            <div className="h-fullscreen flex flex-wrap justify-center">
+            <div className="h-fullscreen flex flex-wrap justify-start max-w-[1000px] m-auto">
                 {recipes.map((recipe) => {
                     let updatedate = new Date(recipe.updatedAt);
                     updatedate = updatedate.toLocaleDateString();

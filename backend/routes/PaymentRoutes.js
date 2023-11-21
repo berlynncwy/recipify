@@ -44,9 +44,24 @@ router.get("/orders", asyncHandler(async (req, res) => {
     res.status(200).json(ret);
 }));
 
+router.get("/orders/:id", asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    console.log("id:" + id);
+    console.log({ id });
+    try {
+        const order = await Order.findById(id);
+        const session = await stripe.checkout.sessions.retrieve(order.session);
+        res.status(200).json({ order, session });
+    } catch (err) {
+        console.warn(err);
+        res.status(500).json({ message: "Something went wrong. Please try again later" });
+        return;
+    }
+
+}));
+
 router.post("/cancel-order", asyncHandler(async (req, res) => {
     const { session } = req.body;
-    const obj = req.body;
     const sessionID = session.id;
     console.log(sessionID);
     try {
@@ -65,7 +80,6 @@ router.post("/create-checkout-session", asyncHandler(async (req, res) => {
     const cart = body.cart;
     const items = cart.map((item) => {
         return {
-            // images: item.image,
             price_data: {
                 currency: 'sgd',
                 unit_amount: Math.round(item.price * 100),
@@ -74,7 +88,6 @@ router.post("/create-checkout-session", asyncHandler(async (req, res) => {
                     images: item.image,
                 },
             },
-            // price: item.price,
             quantity: item.quantity,
         };
     });

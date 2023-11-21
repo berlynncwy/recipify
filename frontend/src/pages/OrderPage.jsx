@@ -85,7 +85,10 @@ const OrderPage = () => {
                         >
                             <Col md={3} className="border-b border-l">
                                 <div className="flex items-center h-full">
-                                    <Link to={"/orders/" + order._id}>
+                                    <Link
+                                        className="order-link underline"
+                                        to={"/orders/" + order._id}
+                                    >
                                         {order._id}
                                     </Link>
                                 </div>
