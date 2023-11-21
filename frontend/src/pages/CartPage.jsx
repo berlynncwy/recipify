@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import CartItem from "../components/CartItem";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { FaShoppingBag } from "react-icons/fa";
 
 const CartPage = () => {
@@ -118,15 +118,28 @@ const CartPage = () => {
                         />
                     );
                 })}
-                <div className="flex justify-center m-5">
-                    <button
-                        className="button checkout flex "
-                        onClick={() => handleCheckout(cart)}
-                    >
-                        <FaShoppingBag className="mt-1 mr-1" />
-                        Checkout
-                    </button>
-                </div>
+                {cart.length > 0 && (
+                    <div className="flex justify-center m-5">
+                        <button
+                            className="button checkout flex "
+                            onClick={() => handleCheckout(cart)}
+                        >
+                            <FaShoppingBag className="mt-1 mr-1" />
+                            Checkout
+                        </button>
+                    </div>
+                )}
+                {cart.length == 0 && (
+                    <div className="h-4/6 flex flex-col justify-center items-center">
+                        <h3 className="font-light">Cart is empty..</h3>
+                        <button
+                            className="button "
+                            onClick={() => navigate("/products")}
+                        >
+                            Click here to shop now
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );
