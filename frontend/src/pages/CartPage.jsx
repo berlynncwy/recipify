@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 
 import { useAuthContext } from "../hooks/useAuthContext";
 import CartItem from "../components/CartItem";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaShoppingBag } from "react-icons/fa";
 
 const CartPage = () => {
     const { user } = useAuthContext();
     const [cart, setCart] = useState([]);
     const cartUrl = window.location.origin + "/api/user/update-cart";
+
+    const totalArray = cart.map((item) => {
+        return item.quantity * item.price;
+    });
+    const sum = totalArray.reduce((a, b) => a + b, 0);
 
     useEffect(() => {
         if (user != null) {
@@ -118,15 +123,23 @@ const CartPage = () => {
                         />
                     );
                 })}
+
                 {cart.length > 0 && (
-                    <div className="flex justify-center m-5">
-                        <button
-                            className="button checkout flex "
-                            onClick={() => handleCheckout(cart)}
-                        >
-                            <FaShoppingBag className="mt-1 mr-1" />
-                            Checkout
-                        </button>
+                    <div>
+                        <div>
+                            <h3 className="font-light text-lg">
+                                Total: ${sum.toFixed(2)}
+                            </h3>
+                        </div>
+                        <div className="flex justify-center m-5">
+                            <button
+                                className="button checkout flex "
+                                onClick={() => handleCheckout(cart)}
+                            >
+                                <FaShoppingBag className="mt-1 mr-1" />
+                                Checkout
+                            </button>
+                        </div>
                     </div>
                 )}
                 {cart.length == 0 && (
