@@ -45,6 +45,7 @@ const RecipePage = () => {
                             description,
                             rating,
                             numReviews,
+                            review,
                             image,
                         }) => {
                             const favourite = isFav(_id);
@@ -62,8 +63,8 @@ const RecipePage = () => {
                                         title={title}
                                         _id={_id}
                                         description={description}
-                                        rating={rating}
-                                        noOfReviews={numReviews}
+                                        review={rating}
+                                        noOfReviews={review.length}
                                         image={image}
                                         favourite={favourite}
                                         onFavourite={() => onFavToggle(_id)}

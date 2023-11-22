@@ -33,7 +33,8 @@ const HomePage = () => {
                         title,
                         description,
                         rating,
-                        numReviews,
+                        review,
+                        noOfReviews,
                         image,
                     }) => {
                         const favourite = isFav(_id);
@@ -52,7 +53,7 @@ const HomePage = () => {
                                     _id={_id}
                                     description={description}
                                     rating={rating}
-                                    noOfReviews={numReviews}
+                                    noOfReviews={review.length}
                                     image={image}
                                     favourite={favourite}
                                     onFavourite={() => onFavToggle(_id)}

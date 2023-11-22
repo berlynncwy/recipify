@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Row, Col, Button, Image } from "react-bootstrap";
+import { Row, Col, Button, Image, Modal } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFav } from "../hooks/useFav";
 import QuantityButton from "../components/QuantityButton";
 import { FaShoppingCart } from "react-icons/fa";
+import ReviewModal from "../components/ReviewModal";
 
 const SingleRecipePage = () => {
     const [recipe, setRecipe] = useState({
         ingredients: [],
         tag: [],
         image: [],
+        review: [],
     });
     const { user } = useAuthContext();
     const [author, setAuthor] = useState({});
@@ -22,8 +24,7 @@ const SingleRecipePage = () => {
     const cartUrl = window.location.origin + "/api/user/cart";
     const relevantUrl = window.location.origin + "/api/products/relevant";
     const [quantity, setQuantity] = useState(1);
-
-    const { fav, isFav, onFavToggle } = useFav();
+    const { isFav, onFavToggle } = useFav();
 
     useEffect(() => {
         fetch(url)
@@ -99,15 +100,15 @@ const SingleRecipePage = () => {
                         <div className="flex flex-1">
                             <Rating
                                 rating={recipe.rating}
-                                noOfReviews={`${recipe.numReviews} ${review}`}
+                                noOfReviews={recipe.review.length}
                             ></Rating>
                             {user && (
                                 <>
-                                    <Button className="btn-sm ml-2 btn-outline-dark">
-                                        Add a review
-                                    </Button>
+                                    <div className="ml-4 mr-4">
+                                        <ReviewModal recipeId={recipe._id} />
+                                    </div>
                                     <Button
-                                        className="btn-sm ml-2 btn-outline-danger"
+                                        className="btn-sm btn-outline-danger"
                                         onClick={() => {
                                             console.log("object");
                                             onFavToggle(id);
@@ -143,10 +144,13 @@ const SingleRecipePage = () => {
                             <p className="font-semibold underline mb-1">
                                 Tags{" "}
                             </p>
-                            <div className="flex" key={recipe._id}>
-                                {recipe.tag.map((tag) => {
+                            <div className="flex">
+                                {recipe.tag.map((tag, i) => {
                                     return (
-                                        <div className="bg-blue-100 mr-2 rounded pl-1 pr-1">
+                                        <div
+                                            className="bg-blue-100 mr-2 rounded pl-1 pr-1"
+                                            key={i}
+                                        >
                                             <p className="flex pl-1 pr-1 tracking-wide">
                                                 {tag.toLowerCase()}
                                             </p>
