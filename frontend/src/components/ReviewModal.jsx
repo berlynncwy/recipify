@@ -5,22 +5,21 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import Stars from "./Stars";
 import { useAuthContext } from "../hooks/useAuthContext";
 
-const ReviewModal = ({ recipeId }) => {
+const ReviewModal = ({ review, recipeId }) => {
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
     const handleShow = () => setOpen(true);
-    const [rating, setRating] = useState(0);
-    const [hoverRating, setHoverRating] = useState(0);
-    const [review, setReview] = useState("");
+    const [rating, setRating] = useState(review ? review.rating : 0);
+    const [hoverRating, setHoverRating] = useState(rating);
+    const [comment, setComment] = useState(review ? review.comment : "");
     const { user } = useAuthContext();
 
     const reviewHandler = (event) => {
-        // console.log(event.target.value);
-        setReview(event.target.value);
+        setComment(event.target.value);
     };
     const submitHandler = () => {
         console.log(rating);
-        console.log(review);
+        console.log(comment);
         if (user == null) return;
 
         const requestOption = {
@@ -29,7 +28,7 @@ const ReviewModal = ({ recipeId }) => {
                 Authorization: `Bearer ${user.token}`,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ rating, comment: review, recipeId }),
+            body: JSON.stringify({ rating, comment: comment, recipeId }),
         };
         const url = window.location.origin + "/api/recipes/add-review";
         fetch(url, requestOption);
@@ -37,8 +36,8 @@ const ReviewModal = ({ recipeId }) => {
 
     return (
         <>
-            <button className="button" onClick={handleShow}>
-                Add a review
+            <button disabled={review} className="button" onClick={handleShow}>
+                {review ? "Already reviewed" : "Add a review"}
             </button>
             <Modal
                 show={open}
@@ -65,6 +64,7 @@ const ReviewModal = ({ recipeId }) => {
                         <Col md={8} className="justify-center">
                             <p className="ml-1 mt-3">Review:</p>
                             <textarea
+                                value={comment}
                                 className="border-1 w-15 mt-1 resize-none rounded-lg p-2"
                                 rows="5"
                                 cols="32"

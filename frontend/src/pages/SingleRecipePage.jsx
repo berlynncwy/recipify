@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Row, Col, Button, Image, Modal } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
@@ -59,6 +59,13 @@ const SingleRecipePage = () => {
             });
     }, []);
 
+    const existingReview = useMemo(
+        () => recipe.review.find((rev) => rev.user == user._id),
+        [recipe, user]
+    );
+
+    console.log(existingReview);
+
     // set review/reviews
     let review = "reviews";
     if (recipe.numReviews <= 1) {
@@ -105,7 +112,10 @@ const SingleRecipePage = () => {
                             {user && (
                                 <>
                                     <div className="ml-4 mr-4">
-                                        <ReviewModal recipeId={recipe._id} />
+                                        <ReviewModal
+                                            review={existingReview}
+                                            recipeId={recipe._id}
+                                        />
                                     </div>
                                     <Button
                                         className="btn-sm btn-outline-danger"
