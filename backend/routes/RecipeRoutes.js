@@ -156,6 +156,34 @@ router.get("/favourites/recipes", asyncHandler(async (req, res) => {
     }
 }));
 
+router.post("/add-review", asyncHandler(async (req, res) => {
+    const { rating, comment, recipeId } = req.body;
+    const custID = req.user.customer;
+    try {
+        const name = await Customer.findById(custID);
+        const recipe = await Recipe.findById(recipeId);
+        const fullname = name.firstName + " " + name.lastName;
+        const review = {
+            user: req.user._id,
+            name: fullname,
+            rating: rating,
+            comment: comment
+        };
+        console.log(recipe);
+        if (recipe.review == null) {
+            recipe.review = [];
+        }
+        recipe.review.push(review);
+        recipe.save();
+        res.status(200);
+    } catch (err) {
+        console.warn(err);
+        res.status(400).json(err);
+    }
+
+
+
+}));
 
 
 export default router;
