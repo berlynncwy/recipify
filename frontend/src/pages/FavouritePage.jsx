@@ -39,7 +39,7 @@ const FavouritePage = () => {
         <>
             <h1>Favourites ♥︎</h1>
             <Container>
-                <Row className="gap-5 justify-start mb-5">
+                <Row className="gap-5 justify-start mb-5 min-h-screen">
                     {fav.map(
                         ({
                             _id,

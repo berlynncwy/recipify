@@ -27,6 +27,7 @@ const RecipePage = () => {
                 return res.json();
             })
             .then((json) => {
+                console.log(json);
                 setRecipe(json);
                 setKeyword("");
             })
@@ -35,7 +36,7 @@ const RecipePage = () => {
             });
     };
 
-    useEffect(refresh, [recipeId]);
+    useEffect(refresh, []);
 
     const keywordHandler = (event) => {
         const search = event.target.value;

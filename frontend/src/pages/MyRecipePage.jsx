@@ -58,7 +58,7 @@ const MyRecipePage = () => {
     };
 
     return (
-        <div className="flex-col justify-center flex">
+        <div className="flex-col justify-center flex min-h-screen">
             <div className="flex-col flex">
                 <h1>My Recipe Page</h1>
                 <Button
