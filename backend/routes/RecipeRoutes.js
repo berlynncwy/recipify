@@ -20,6 +20,16 @@ router.get("/", asyncHandler(async (req, res) => {
     res.status(200).json(recipes);
 }));
 
+
+router.get("/getrecipe", asyncHandler(async (req, res) => {
+    const keyword = req.query.keyword;
+    const recipe = await Recipe.find({
+        $or: [{ title: { $regex: "(?i)" + keyword } },
+        { tag: { $regex: "(?i)" + keyword } }]
+    });
+    res.status(200).json(recipe);
+}));
+
 // get single recipe
 router.get("/:id", asyncHandler(async (req, res) => {
     const { id } = req.params;

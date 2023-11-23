@@ -20,6 +20,8 @@ const ReviewModal = ({ review, recipeId }) => {
     const submitHandler = () => {
         console.log(rating);
         console.log(comment);
+        alert("Review has been submitted. Thank you!");
+        handleClose();
         if (user == null) return;
 
         const requestOption = {

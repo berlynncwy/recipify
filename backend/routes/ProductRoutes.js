@@ -18,6 +18,17 @@ router.get("/", asyncHandler(async (req, res) => {
     res.status(200).json(products);
 }));
 
+router.get("/getproduct", asyncHandler(async (req, res) => {
+    console.log(req.query.keyword);
+    const keyword = req.query.keyword;
+    const product = await Product.find({
+        $or: [{ name: { $regex: "(?i)" + keyword } },
+        { category: { $regex: "(?i)" + keyword } },
+        { brand: { $regex: "(?i)" + keyword } }]
+    });
+    res.status(200).json(product);
+}));
+
 // get relevant products
 router.post("/relevant", bodyParser.json(), asyncHandler(async (req, res) => {
     const json = req.body;

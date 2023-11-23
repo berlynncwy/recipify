@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Row, Col, Button, Image, Modal } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -7,6 +7,7 @@ import { useFav } from "../hooks/useFav";
 import QuantityButton from "../components/QuantityButton";
 import { FaShoppingCart } from "react-icons/fa";
 import ReviewModal from "../components/ReviewModal";
+import Stars from "../components/Stars";
 
 const SingleRecipePage = () => {
     const [recipe, setRecipe] = useState({
@@ -63,14 +64,24 @@ const SingleRecipePage = () => {
         () => recipe.review.find((rev) => rev.user == user._id),
         [recipe, user]
     );
-
     console.log(existingReview);
+    // const totalArray = cart.map((item) => {
+    //     return item.quantity * item.price;
+    // });
+    // const sum = totalArray.reduce((a, b) => a + b, 0);
+    const avgRating = useMemo(() => {
+        let avgRating = 0;
+        if (recipe != null) {
+            let totalRating = recipe.review
+                .map((review) => review.rating)
+                .reduce((sum, rating) => sum + rating, 0);
 
-    // set review/reviews
-    let review = "reviews";
-    if (recipe.numReviews <= 1) {
-        review = "review";
-    }
+            if (recipe.review.length > 0 && totalRating > 0) {
+                avgRating = totalRating / recipe.review.length;
+            }
+        }
+        return avgRating;
+    }, [recipe]);
 
     const submitHandler = (product) => {
         console.log(quantity);
@@ -98,7 +109,7 @@ const SingleRecipePage = () => {
     };
 
     return (
-        <div>
+        <div className="min-h-screen">
             <Row>
                 <Col>
                     <h1 className="tracking-wide">{recipe.title}</h1>
@@ -106,7 +117,7 @@ const SingleRecipePage = () => {
                     <div className="m-3 flex">
                         <div className="flex flex-1">
                             <Rating
-                                rating={recipe.rating}
+                                rating={avgRating}
                                 noOfReviews={recipe.review.length}
                             ></Rating>
                             {user && (
@@ -200,6 +211,32 @@ const SingleRecipePage = () => {
                                 </>
                             )}
                         </ul>
+                    </div>
+                    <div>
+                        <h3 className="tracking-wide text-left">Reviews</h3>
+                        <div className="overflow overflow-scroll h-60">
+                            {recipe.review.map((review) => {
+                                return (
+                                    <div className="border-1 ml-3 rounded-lg mb-2 scroll">
+                                        <Row className="pl-2 pr-2 pt-2">
+                                            <Col md={2}>Rating</Col>
+                                            <Col>
+                                                <Stars rating={review.rating} />
+                                            </Col>
+                                        </Row>
+                                        <Row className="pl-2 pr-2 pt-2">
+                                            <Col md={2}>Comment</Col>
+                                            <Col>{review.comment}</Col>
+                                        </Row>
+                                        <Row className="p-2 italic">
+                                            <Col className="font-extrabold text-xs">
+                                                {review.name}
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </Col>
 

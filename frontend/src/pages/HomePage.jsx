@@ -1,5 +1,5 @@
 import { Row, Col } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import RecipeItem from "../components/RecipeItem";
 import { useFav } from "../hooks/useFav";
@@ -38,7 +38,19 @@ const HomePage = () => {
                         image,
                     }) => {
                         const favourite = isFav(_id);
+                        const avgRating = (() => {
+                            let avgRating = 0;
+                            if (review != null) {
+                                let totalRating = review
+                                    .map((review) => review.rating)
+                                    .reduce((sum, rating) => sum + rating, 0);
 
+                                if (review.length > 0 && totalRating > 0) {
+                                    avgRating = totalRating / review.length;
+                                }
+                            }
+                            return avgRating;
+                        })();
                         return (
                             <Col
                                 key={_id}
@@ -52,7 +64,7 @@ const HomePage = () => {
                                     title={title}
                                     _id={_id}
                                     description={description}
-                                    rating={rating}
+                                    rating={avgRating}
                                     noOfReviews={review.length}
                                     image={image}
                                     favourite={favourite}
