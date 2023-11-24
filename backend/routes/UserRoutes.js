@@ -7,7 +7,6 @@ import requireAuth from "../middleware/requireAuth.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import Customer from "../models/CustomerModel.js";
 import User from "../models/UserModel.js";
-import Recipe from "../models/RecipeModel.js";
 
 const createToken = (_id) => {
   return jwt.sign({ _id }, process.env.SECRET, { expiresIn: '3d' });

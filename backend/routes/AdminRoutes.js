@@ -1,26 +1,44 @@
 import express from "express";
 import bodyParser from 'body-parser';
-
+import requireAuth from "../middleware/requireAuth.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/UserModel.js";
-import Admin from "../models/AdminModel.js";
+import Customer from "../models/CustomerModel.js";
 import Product from "../models/ProductModel.js";
 import Supplier from "../models/SupplierModel.js";
 
 const router = express.Router();
 
-// create new admin accounts
-router.post("/signup", bodyParser.json(), asyncHandler(async (req, res) => {
-    const json = req.body;
-    const admin = new Admin(json);
-    let resultAdmin = await admin.save();
-    const user = new User({
-        ...json,
-        admin: resultAdmin._id
-    });
-    await user.save();
-    res.json(resultAdmin);
-    console.log("Admin created!");
+router.get("/getemail", asyncHandler(async (req, res) => {
+    console.log(req.query.email);
+    try {
+        const user = await User.findOne({ email: req.query.email });
+        if (user != null) {
+            const customer = await Customer.findById(user.customer);
+            console.log(customer);
+            res.status(200).json({ user, customer });
+            return;
+        }
+        res.status(200).json({ user: null, customer: null });
+    } catch (err) {
+        console.warn(err);
+    }
+
+}));
+
+router.use(requireAuth);
+
+// make user admin
+router.post("/make-admin", asyncHandler(async (req, res) => {
+    if (!req.user.isAdmin) {
+        res.status(401).json({ error: 'Request is not authorized; requires Admin' });
+        return;
+    }
+
+    const { id, isAdmin } = req.body;
+    const admin = await User.findByIdAndUpdate(id, { isAdmin });
+    console.log(admin);
+    res.status(200);
 }));
 
 // create new products
