@@ -38,7 +38,7 @@ router.post("/make-admin", asyncHandler(async (req, res) => {
     const { id, isAdmin } = req.body;
     const admin = await User.findByIdAndUpdate(id, { isAdmin });
     console.log(admin);
-    res.status(200);
+    res.status(200).json({});
 }));
 
 // create new products

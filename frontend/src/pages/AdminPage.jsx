@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -28,6 +28,7 @@ const AdminPage = () => {
                 .then((json) => {
                     if (json.user == null) {
                         setErrorMsg("Email not found");
+                        return;
                     }
 
                     setUser(json.user);
@@ -40,29 +41,42 @@ const AdminPage = () => {
         }
     };
 
-    const handleSubmit = () => {
-        console.log("first");
+    const handleSubmit = useCallback(async () => {
+        console.log("fir");
         if (user != null && auth.user != null) {
             const id = user._id;
             const url = window.location.origin + "/api/admin/make-admin";
-            fetch(url, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${auth.user.token}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ id, isAdmin: checked }),
-            })
-                .then((res) => {
-                    alert("User is now an admin.");
-                    setUser("");
-                    setCustomer(null);
-                })
-                .catch((err) => {
-                    console.log(err);
+
+            console.log(user);
+            console.log(auth);
+
+            const callFetch = async () => {
+                console.log("third");
+                await fetch(url, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${auth.user.token}`,
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id, isAdmin: checked }),
                 });
+                console.log("fourth");
+                if (!user.isAdmin) {
+                    alert("User is now an admin.");
+                } else {
+                    alert("User is no longer an admin.");
+                }
+                setUser("");
+                setCustomer(null);
+            };
+
+            callFetch().catch((err) => {
+                console.warn(err);
+            });
+
+            console.log("second");
         }
-    };
+    }, [user, auth, checked]);
 
     return (
         <div className="min-h-screen">

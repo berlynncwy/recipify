@@ -13,51 +13,81 @@ const Header = () => {
     };
     const isLoggedOut = user == null;
 
+    const showAccountButtons = () => {
+        if (user) {
+            if (user.isAdmin) {
+                return (
+                    <Button
+                        // variant="outline-light"
+                        onClick={handleLogout}
+                        as={Link}
+                        to="/login"
+                        className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs bg-green border-green-800 bg-green-800 hover:bg-green-950 hover:border-green-950"
+                    >
+                        Log out
+                    </Button>
+                );
+            } else {
+                return (
+                    <div className="flex">
+                        <Dropdown>
+                            <Dropdown.Toggle
+                                className="hidden lg:flex lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide mr-3"
+                                variant="outline-dark"
+                                id="dropdown-basic"
+                            >
+                                Account
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item as={Link} to="/account">
+                                    My Account
+                                </Dropdown.Item>
+                                <Dropdown.Item as={Link} to="/myrecipes">
+                                    My Recipes
+                                </Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Button
+                            // variant="outline-light"
+                            onClick={handleLogout}
+                            as={Link}
+                            to="/login"
+                            className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs bg-green border-green-800 bg-green-800 hover:bg-green-950 hover:border-green-950"
+                        >
+                            Log out
+                        </Button>
+                    </div>
+                );
+            }
+        } else {
+            return (
+                <div className="flex items-center">
+                    <Button
+                        variant="success"
+                        as={Link}
+                        to="/login"
+                        className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs mr-3"
+                    >
+                        Login
+                    </Button>
+                    <Button
+                        variant="success"
+                        as={Link}
+                        to="/signup"
+                        className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs"
+                    >
+                        Sign up
+                    </Button>
+                </div>
+            );
+        }
+    };
+
     return (
         <header className="border-b border-gray-100">
             <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between sm:px-6 lg:px-8">
                 <div className="flex items-center gap-3">
-                    <Dropdown>
-                        <Dropdown.Toggle
-                            className=" lg:hidden xs:flex sm:text-xs sm:font-bold sm:uppercase sm:tracking-wide sm:text-gray-500"
-                            variant=""
-                            id="dropdown-basic"
-                        >
-                            Menu
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            {user && user.isAdmin && (
-                                <Dropdown.Item as={Link} to="/recipes">
-                                    Admin
-                                </Dropdown.Item>
-                            )}
-                            <Dropdown.Item as={Link} to="/recipes">
-                                Recipes
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/products">
-                                Products
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/favourites">
-                                Favourites
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/cart">
-                                Cart
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/orders">
-                                Orders
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/account">
-                                My Account
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/myrecipes">
-                                My Recipes
-                            </Dropdown.Item>
-                            <Dropdown.Item as={Link} to="/logout">
-                                Log Out
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
                     {user && user.isAdmin ? (
                         <>
                             <Link
@@ -287,80 +317,7 @@ const Header = () => {
 
                     <div className="flex items-center">
                         <div className="flex items-center border-x border-gray-100">
-                            <span className="">
-                                <div>
-                                    {!user && (
-                                        <div className="flex items-center">
-                                            <Button
-                                                variant="success"
-                                                as={Link}
-                                                to="/login"
-                                                className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs mr-3"
-                                            >
-                                                Login
-                                            </Button>
-                                            <Button
-                                                variant="success"
-                                                as={Link}
-                                                to="/signup"
-                                                className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs"
-                                            >
-                                                Sign up
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
-                                {user && user.isAdmin ? (
-                                    <>
-                                        {" "}
-                                        <Button
-                                            // variant="outline-light"
-                                            onClick={handleLogout}
-                                            as={Link}
-                                            to="/login"
-                                            className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs bg-green border-green-800 bg-green-800 hover:bg-green-950 hover:border-green-950"
-                                        >
-                                            Log out
-                                        </Button>
-                                    </>
-                                ) : (
-                                    <div className="flex">
-                                        <Dropdown>
-                                            <Dropdown.Toggle
-                                                className="hidden lg:flex lg:text-xs lg:font-bold lg:uppercase lg:tracking-wide mr-3"
-                                                variant="outline-dark"
-                                                id="dropdown-basic"
-                                            >
-                                                Account
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item
-                                                    as={Link}
-                                                    to="/account"
-                                                >
-                                                    My Account
-                                                </Dropdown.Item>
-                                                <Dropdown.Item
-                                                    as={Link}
-                                                    to="/myrecipes"
-                                                >
-                                                    My Recipes
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                        <Button
-                                            // variant="outline-light"
-                                            onClick={handleLogout}
-                                            as={Link}
-                                            to="/login"
-                                            className="btn-sm lg:font-bold lg:uppercase lg:tracking-wide lg:text-xs bg-green border-green-800 bg-green-800 hover:bg-green-950 hover:border-green-950"
-                                        >
-                                            Log out
-                                        </Button>
-                                    </div>
-                                )}
-                            </span>
+                            <span className="">{showAccountButtons()}</span>
                         </div>
                     </div>
                 </div>
