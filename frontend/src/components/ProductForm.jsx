@@ -218,7 +218,7 @@ const ProductForm = ({ product, onSubmit }) => {
                 type="submit"
                 onClick={submitHandler}
             >
-                Add product
+                Submit product
             </button>
         </div>
     );

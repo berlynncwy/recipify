@@ -65,10 +65,41 @@ router.post("/make-admin", asyncHandler(async (req, res) => {
 router.post("/add-product", bodyParser.json(), asyncHandler(async (req, res) => {
     const json = req.body;
     const user = req.user;
-    const product = new Product({ ...json, createdBy: user._id });
-    product.save();
-    res.json(product);
-    console.log("Product added!");
+    try {
+        const product = new Product({ ...json, createdBy: user._id });
+        product.save();
+        res.json(product);
+        console.log("Product added!");
+    } catch (err) {
+        console.warn(err);
+    }
+
+}));
+
+router.post("/edit-product/:id", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("product edit");
+    try {
+        console.log(req.body);
+        const updated = req.body;
+        await Product.findByIdAndUpdate(updated._id, updated);
+        res.status(200).json("Product successfully updated.");
+    } catch (err) {
+        console.warn(err);
+        res.status(400).json(err);
+    }
+}));
+
+// delete product
+router.delete("/:id", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("removing product ------");
+    const { id } = req.params;
+    try {
+        await Product.deleteOne({ _id: id });
+        res.status(200).json("Product successfully removed.");
+    } catch (err) {
+        res.status(400).json(err);
+    }
+    console.log(id);
 }));
 
 // create new suppliers
