@@ -35,7 +35,7 @@ const TagComponent = ({ tags: tag, onTagsChange }) => {
         <>
             <div className="flex">
                 <input
-                    className="p-2 border-1 mt-1 mb-3 w-1/4 rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                    className="p-2 border-1 mt-1 mb-3 w-auto rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                     placeholder="seafood"
                     type="text"
                     value={tagInput}

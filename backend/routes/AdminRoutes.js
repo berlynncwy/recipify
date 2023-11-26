@@ -23,7 +23,27 @@ router.get("/getemail", asyncHandler(async (req, res) => {
     } catch (err) {
         console.warn(err);
     }
+}));
 
+// get all suppliers
+router.get("/suppliers", asyncHandler(async (req, res) => {
+    const suppliers = await Supplier.find({});
+    if (!suppliers) {
+        res.status(404).json({ suppliers: [] });
+        return;
+    }
+    console.log(suppliers);
+    res.status(200).json({ suppliers });
+}));
+
+// get all products
+router.get("/products", asyncHandler(async (req, res) => {
+    const products = await Product.find({});
+    if (!products) {
+        res.status(404).json({ products: [] });
+        return;
+    } console.log(products);
+    res.status(200).json({ products });
 }));
 
 router.use(requireAuth);
@@ -44,7 +64,8 @@ router.post("/make-admin", asyncHandler(async (req, res) => {
 // create new products
 router.post("/add-product", bodyParser.json(), asyncHandler(async (req, res) => {
     const json = req.body;
-    const product = new Product(json);
+    const user = req.user;
+    const product = new Product({ ...json, createdBy: user._id });
     product.save();
     res.json(product);
     console.log("Product added!");

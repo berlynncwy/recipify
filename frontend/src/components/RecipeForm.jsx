@@ -58,9 +58,9 @@ const RecipeForm = ({ recipe, onSubmit }) => {
                 recipeTag.length == 0 ||
                 imageData == null
             ) {
-                setErrorMsg("** All fields must be filled..");
+                setErrorMsg("** All fields must be filled.");
 
-                console.warn("** All fields must be filled..");
+                console.warn("** All fields must be filled.");
                 return false;
             }
 
