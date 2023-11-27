@@ -36,6 +36,27 @@ router.get("/suppliers", asyncHandler(async (req, res) => {
     res.status(200).json({ suppliers });
 }));
 
+// get supplier by keyword
+router.get("/getsupplier", asyncHandler(async (req, res) => {
+    const keyword = req.query.keyword;
+    try {
+        const supplier = await Supplier.find({
+            $or: [{ name: { $regex: "(?i)" + keyword } },
+            { contactPerson: { $regex: "(?i)" + keyword } }]
+        });
+        if (!supplier) {
+            res.status(404).json({ suppliers: [] });
+            return;
+        }
+        res.status(200).json(supplier);
+        return;
+
+    } catch (err) {
+        console.warn(err);
+    }
+
+}));
+
 // get all products
 router.get("/products", asyncHandler(async (req, res) => {
     const products = await Product.find({});
@@ -105,8 +126,9 @@ router.delete("/:id", bodyParser.json(), asyncHandler(async (req, res) => {
 // create new suppliers
 router.post("/add-supplier", bodyParser.json(), asyncHandler(async (req, res) => {
     const json = req.body;
+    const user = req.user;
     try {
-        const supplier = new Supplier(json);
+        const supplier = new Supplier({ ...json, createdBy: user._id });
         supplier.save();
         res.json(supplier);
         console.log("Supplier added!");
@@ -116,5 +138,32 @@ router.post("/add-supplier", bodyParser.json(), asyncHandler(async (req, res) =>
     }
 
 }));
+
+router.post("/edit-supplier/:id", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("supplier edit");
+    try {
+        console.log(req.body);
+        const updated = req.body;
+        await Supplier.findByIdAndUpdate(updated._id, updated);
+        res.status(200).json("Supplier successfully updated.");
+    } catch (err) {
+        console.warn(err);
+        res.status(400).json(err);
+    }
+}));
+
+// delete supplier
+router.delete("/supplier/:id", bodyParser.json(), asyncHandler(async (req, res) => {
+    console.log("removing product ------");
+    const { id } = req.params;
+    try {
+        await Supplier.deleteOne({ _id: id });
+        res.status(200).json("Supplier successfully removed.");
+    } catch (err) {
+        res.status(400).json(err);
+    }
+    console.log(id);
+}));
+
 
 export default router;

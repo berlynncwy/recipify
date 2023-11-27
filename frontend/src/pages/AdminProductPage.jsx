@@ -65,10 +65,10 @@ const AdminProductPage = () => {
     };
 
     const removeHandler = (product) => {
-        if (confirm("Are you sure you want to delete this recipe?")) {
+        if (confirm("Are you sure you want to delete this product?")) {
             const id = product._id;
             console.log(id);
-            deleteProductById(id).catch((e) => console.warn(e));
+            deleteProductById(id).catch((err) => console.warn(err));
         } else {
             return;
         }
@@ -89,12 +89,7 @@ const AdminProductPage = () => {
     return (
         <div className="min-h-screen">
             <h1>Product Management </h1>
-            <Tabs
-                defaultActiveKey="add"
-                transition={false}
-                id="noanim-tab-example"
-                className="mb-3"
-            >
+            <Tabs defaultActiveKey="add" transition={false} className="mb-3">
                 <Tab
                     eventKey="add"
                     title="Add products"
@@ -221,7 +216,7 @@ const AdminProductPage = () => {
                     </div>
                 </Tab>
                 <Tab
-                    eventKey="edit"
+                    eventKey="edit/remove"
                     title="Edit / remove products"
                     className="p-3"
                 >
