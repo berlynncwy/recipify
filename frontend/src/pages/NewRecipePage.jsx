@@ -1,9 +1,11 @@
 import React from "react";
 import RecipeForm from "../components/RecipeForm";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const NewRecipePage = () => {
     const { user } = useAuthContext();
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -28,6 +30,7 @@ const NewRecipePage = () => {
                         .then((res) => {
                             if (res.ok) {
                                 alert("Recipe created.");
+                                navigate("/myrecipes");
                             } else {
                             }
                         })

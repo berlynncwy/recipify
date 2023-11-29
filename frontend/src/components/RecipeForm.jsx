@@ -4,6 +4,7 @@ import ImageUploader from "./ImageUploader";
 import IngredientComponent from "./IngredientComponent";
 import TagComponent from "./TagComponent";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const RecipeForm = ({ recipe, onSubmit }) => {
     const [recipeDetails, setRecipeDetails] = useState(
@@ -160,6 +161,11 @@ const RecipeForm = ({ recipe, onSubmit }) => {
         setRecipeTag(tags);
         console.log(recipeTag);
     };
+    const navigate = useNavigate();
+
+    const cancelHandler = () => {
+        if (confirm("Are you sure you want to cancel?")) navigate("/myrecipes");
+    };
 
     return (
         <div className="min-h-screen max-h-full ">
@@ -288,7 +294,11 @@ const RecipeForm = ({ recipe, onSubmit }) => {
             </form>
             <div className="flex justify-center mb-5 mt-2">
                 <div className="flex ">
-                    <Button className="btn-sm m-1" variant="outline-dark">
+                    <Button
+                        className="btn-sm m-1"
+                        variant="outline-dark"
+                        onClick={cancelHandler}
+                    >
                         Cancel
                     </Button>
                     <Button

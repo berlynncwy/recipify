@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import RecipeForm from "../components/RecipeForm";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const EditRecipePage = () => {
     const { id } = useParams();
     const { user } = useAuthContext();
     const [recipe, setRecipe] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(window.location.origin + "/api/recipes/" + id, {
@@ -52,6 +54,7 @@ const EditRecipePage = () => {
                         .then((res) => {
                             if (res.ok) {
                                 alert("Recipe updated.");
+                                navigate("/recipes/" + newRecipe._id);
                             } else {
                             }
                         })
