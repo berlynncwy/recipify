@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Row, Col, Button, Image } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useFav } from "../hooks/useFav";
@@ -83,10 +83,14 @@ const SingleRecipePage = () => {
         return avgRating;
     }, [recipe]);
 
+    const navigate = useNavigate();
+
     const submitHandler = (product) => {
         console.log(quantity);
         console.log(product);
-
+        if (user == null) {
+            navigate("/login");
+        }
         fetch(cartUrl, {
             method: "POST",
             headers: {
@@ -214,6 +218,11 @@ const SingleRecipePage = () => {
                     </div>
                     <div>
                         <h3 className="tracking-wide text-left">Reviews</h3>
+                        {recipe.review.length == 0 && (
+                            <div className="ml-3 italic">
+                                No reviews given at the moment.
+                            </div>
+                        )}
                         <div className="overflow overflow-scroll h-60">
                             {recipe.review.map((review) => {
                                 return (

@@ -83,7 +83,7 @@ const MyRecipePage = () => {
                                 />
                             </div>
 
-                            <div className="ml-1 mr-10 pt-2 font-medium">
+                            <div className="ml-1 mr-9 pt-2 font-medium">
                                 Title: {recipe.title}
                                 <br></br>
                                 Updated on: {updatedate}

@@ -35,6 +35,7 @@ const QuantityButton = ({ id, setValue, value, min, max, disabled }) => {
                     className="outline-none focus:outline-none text-center w-full bg-gray-200 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700"
                     name="custom-input-number"
                     value={value}
+                    onKeyDown={(evt) => evt.key === "." && evt.preventDefault()}
                     onChange={onChange}
                 ></input>
                 <button

@@ -47,33 +47,39 @@ const OrderPage = () => {
         <div>
             <h1>Order History</h1>
             <div className="justify-center min-h-screen">
-                <Row className="justify-center font-medium">
-                    <Col
-                        md={3}
-                        className="border-t border-b border-l pt-1 pb-1"
-                    >
-                        Order No.
-                    </Col>
-                    <Col
-                        md={1}
-                        className="border-t border-b border-l pt-1 pb-1"
-                    >
-                        Order Date
-                    </Col>
-                    <Col
-                        md={2}
-                        className="border-t border-b border-l pt-1 pb-1"
-                    >
-                        Total Amount
-                    </Col>
-                    <Col
-                        md={2}
-                        className="border-t border-b border-l border-r pt-1 pb-1"
-                    >
-                        Payment Status
-                    </Col>
-                </Row>
-
+                {objects.length > 0 && (
+                    <Row className="justify-center font-medium">
+                        <Col
+                            md={3}
+                            className="border-t border-b border-l pt-1 pb-1"
+                        >
+                            Order No.
+                        </Col>
+                        <Col
+                            md={1}
+                            className="border-t border-b border-l pt-1 pb-1"
+                        >
+                            Order Date
+                        </Col>
+                        <Col
+                            md={2}
+                            className="border-t border-b border-l pt-1 pb-1"
+                        >
+                            Total Amount
+                        </Col>
+                        <Col
+                            md={2}
+                            className="border-t border-b border-l border-r pt-1 pb-1"
+                        >
+                            Payment Status
+                        </Col>
+                    </Row>
+                )}
+                {objects.length == 0 && (
+                    <div className="flex justify-center">
+                        You have not made any orders yet.{" "}
+                    </div>
+                )}
                 {objects.map((object) => {
                     const { order, session } = object;
                     let updatedate = new Date(order.updatedAt);
