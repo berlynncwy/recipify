@@ -20,20 +20,23 @@ const ReviewModal = ({ review, recipeId }) => {
     const submitHandler = () => {
         console.log(rating);
         console.log(comment);
-        alert("Review has been submitted. Thank you!");
-        handleClose();
-        if (user == null) return;
-
-        const requestOption = {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ rating, comment: comment, recipeId }),
-        };
-        const url = window.location.origin + "/api/recipes/add-review";
-        fetch(url, requestOption);
+        if (comment != "") {
+            alert("Review has been submitted. Thank you!");
+            handleClose();
+            if (user == null) return;
+            const requestOption = {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ rating, comment: comment, recipeId }),
+            };
+            const url = window.location.origin + "/api/recipes/add-review";
+            fetch(url, requestOption);
+        } else {
+            alert("Please leave a comment.");
+        }
     };
 
     return (
@@ -64,7 +67,7 @@ const ReviewModal = ({ review, recipeId }) => {
                     </Row>
                     <Row className="flex justify-center">
                         <Col md={8} className="justify-center">
-                            <p className="ml-1 mt-3">Review:</p>
+                            <p className="ml-1 mt-3">Comment:</p>
                             <textarea
                                 value={comment}
                                 className="border-1 w-15 mt-1 resize-none rounded-lg p-2"
@@ -78,7 +81,7 @@ const ReviewModal = ({ review, recipeId }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     <button className="button" onClick={handleClose}>
-                        Close
+                        Cancel
                     </button>
                     <button className="button" onClick={submitHandler}>
                         Post
