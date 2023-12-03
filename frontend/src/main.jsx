@@ -31,6 +31,7 @@ import SingleOrderPage from "./pages/SingleOrderPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
 import AdminProductPage from "./pages/AdminProductPage.jsx";
 import AdminSupplierPage from "./pages/AdminSupplierPage.jsx";
+import AdminOrderPage from "./pages/AdminOrderPage.jsx";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/products" element={<AdminProductPage />} />
             <Route path="/admin/suppliers" element={<AdminSupplierPage />} />
+            <Route path="admin/orders" element={<AdminOrderPage />} />
             <Route path="/*" element={<Navigate to="/error" replace />} />
             <Route path="/error" element={<ErrorPage />} />
         </Route>

@@ -6,8 +6,13 @@ import User from "../models/UserModel.js";
 import Customer from "../models/CustomerModel.js";
 import Product from "../models/ProductModel.js";
 import Supplier from "../models/SupplierModel.js";
+import Order from "../models/OrderModel.js";
+import stripeInit from "stripe";
 
 const router = express.Router();
+const domain = "http://localhost:5173";
+
+const stripe = stripeInit("sk_test_51OECYmHBf5r5gOUvnDYolCbgkxPmzNCn8KNiZoHt1cRxHHfGc6TEQUMRbAmuu0Bn4rTqtYBg8yCjuSY0TCAy7Ttk003LH8fqCo");
 
 router.get("/getemail", asyncHandler(async (req, res) => {
     console.log(req.query.email);
@@ -54,6 +59,55 @@ router.get("/getsupplier", asyncHandler(async (req, res) => {
     } catch (err) {
         console.warn(err);
     }
+
+}));
+
+// get order by keyword
+router.get("/getorder", asyncHandler(async (req, res) => {
+    const keyword = req.query.keyword;
+
+    let orders = [];
+    let userCustomerMap = new Map();
+
+    try {
+        orders = await Order.find({ _id: keyword }).sort({ "createdAt": -1 });
+        // console.log(orders);
+        const userIds = orders.map((order) => order.user);
+        const users = await User.find({ "_id": { $in: userIds } });
+        const custIds = users.map(user => user.customer);
+        const customers = await Customer.find({ "_id": { $in: custIds } });
+        const customerMap = new Map(customers.map(customer => [customer._id.toHexString(), customer]));
+        userCustomerMap = new Map(users.map(user => [user._id.toHexString(), customerMap.get(user.customer.toHexString())]));
+        console.log(customerMap);
+        console.log(userCustomerMap);
+    } catch (err) {
+        console.warn(err);
+        res.status(500).json({ message: "Something went wrong. Please try again later" });
+        return;
+    }
+
+    let ret = [];
+    for (const i in orders) {
+        const order = orders[i];
+        // console.log("ordersssession------" + order.session);
+        const sessionID = order.session;
+        const customer = userCustomerMap.get(order.user.toHexString());
+        if (customer == null) {
+            continue;
+        }
+
+        try {
+            const session = await stripe.checkout.sessions.retrieve(sessionID);
+            ret.push({ customer, order, session });
+        } catch (err) {
+            console.warn(err);
+            res.status(500).json({ message: "Something went wrong. Please try again later" });
+        }
+    }
+    console.log(ret);
+    res.status(200).json(ret);
+    return;
+
 
 }));
 
@@ -165,5 +219,57 @@ router.delete("/supplier/:id", bodyParser.json(), asyncHandler(async (req, res) 
     console.log(id);
 }));
 
+router.get("/orders", asyncHandler(async (req, res) => {
+    let orders = [];
+    let userCustomerMap = new Map();
+
+    try {
+        orders = await Order.find({}).sort({ "createdAt": -1 });
+        // console.log(orders);
+        const userIds = orders.map((order) => order.user);
+        const users = await User.find({ "_id": { $in: userIds } });
+        const custIds = users.map(user => user.customer);
+        const customers = await Customer.find({ "_id": { $in: custIds } });
+        const customerMap = new Map(customers.map(customer => [customer._id.toHexString(), customer]));
+        userCustomerMap = new Map(users.map(user => [user._id.toHexString(), customerMap.get(user.customer.toHexString())]));
+        console.log(customerMap);
+        console.log(userCustomerMap);
+    } catch (err) {
+        console.warn(err);
+        res.status(500).json({ message: "Something went wrong. Please try again later" });
+        return;
+    }
+
+    let ret = [];
+    for (const i in orders) {
+        const order = orders[i];
+        // console.log("ordersssession------" + order.session);
+        const sessionID = order.session;
+        const customer = userCustomerMap.get(order.user.toHexString());
+        if (customer == null) {
+            continue;
+        }
+
+        try {
+            const session = await stripe.checkout.sessions.retrieve(sessionID);
+            ret.push({ customer, order, session });
+        } catch (err) {
+            console.warn(err);
+            res.status(500).json({ message: "Something went wrong. Please try again later" });
+        }
+    }
+    res.status(200).json(ret);
+    // try {
+    //     const sessions = await stripe.checkout.sessions.list({
+    //         limit: 10
+    //     });
+    //     res.status(200).json(sessions);
+    // } catch (err) {
+    //     console.warn(err);
+    //     res.status(500).json({ message: "Something went wrong. Please try again later" });
+
+    // }
+
+}));
 
 export default router;
