@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import validator from "validator";
 
 const SupplierForm = ({ supplier, onSubmit }) => {
     const [supplierName, setSupplierName] = useState(
@@ -76,6 +77,14 @@ const SupplierForm = ({ supplier, onSubmit }) => {
                 address.postalCode == ""
             ) {
                 setError("**All fields must be filled");
+                return false;
+            }
+            if (!validator.isEmail(email)) {
+                setError("**Email is invalid");
+                return false;
+            }
+            if (!validator.isMobilePhone(mobile)) {
+                setError("** Mobile number is invalid");
                 return false;
             }
             return true;

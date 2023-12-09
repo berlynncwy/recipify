@@ -77,7 +77,15 @@ router.post("/signup", bodyParser.json(), asyncHandler(async (req, res) => {
 
 router.get("/:id", asyncHandler(async (req, res) => {
   console.log(req.params.id);
-  const user = await Customer.findById(req.params.id);
+  try {
+    const user = await User.findById(req.params.id);
+    const customer = await Customer.findById(user.customer);
+    res.status(200).json({ user, customer });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+
+
 }));
 
 // needs to be authenticated to create new recipe

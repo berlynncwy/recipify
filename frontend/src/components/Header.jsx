@@ -40,9 +40,6 @@ const Header = () => {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item as={Link} to="/account">
-                                    My Account
-                                </Dropdown.Item>
                                 <Dropdown.Item as={Link} to="/myrecipes">
                                     My Recipes
                                 </Dropdown.Item>

@@ -13,7 +13,6 @@ import {
 import App from "./App.jsx";
 import ErrorPage from "./pages/ErrorPage";
 import CartPage from "./pages/CartPage";
-import MyAccount from "./pages/MyAccount";
 import HomePage from "./pages/HomePage";
 import RecipePage from "./pages/RecipePage";
 import LoginPage from "./pages/LoginPage";
@@ -44,7 +43,6 @@ const router = createBrowserRouter(
             <Route path="/cart" element={<CartPage />} />
             <Route path="/orders" element={<OrderPage />} />
             <Route path="/favourites" element={<FavouritePage />} />
-            <Route path="/account" element={<MyAccount />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/newrecipe" element={<NewRecipePage />} />
