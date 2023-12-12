@@ -4,8 +4,10 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import CartItem from "../components/CartItem";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingBag } from "react-icons/fa";
+import { Spinner } from "react-bootstrap";
 
 const CartPage = () => {
+    const [loading, setLoading] = useState(true);
     const { user } = useAuthContext();
     const [cart, setCart] = useState([]);
     const cartUrl = window.location.origin + "/api/user/update-cart";
@@ -18,6 +20,7 @@ const CartPage = () => {
     useEffect(() => {
         if (user != null) {
             console.log(user);
+            setLoading(true);
             fetch("api/user/getemail/?email=" + user.email, {
                 headers: { Authorization: `Bearer ${user.token}` },
             })
@@ -28,7 +31,8 @@ const CartPage = () => {
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                })
+                .finally(() => setLoading(false));
         }
     }, [user]);
 
@@ -142,17 +146,23 @@ const CartPage = () => {
                         </div>
                     </div>
                 )}
-                {cart.length == 0 && (
-                    <div className="h-4/6 flex flex-col justify-center items-center">
-                        <h3 className="font-light">Cart is empty..</h3>
-                        <button
-                            className="button "
-                            onClick={() => navigate("/products")}
-                        >
-                            Click here to shop now
-                        </button>
-                    </div>
-                )}
+                <div className="h-4/6 flex flex-col justify-center items-center">
+                    {loading ? (
+                        <Spinner />
+                    ) : (
+                        cart.length == 0 && (
+                            <>
+                                <h3 className="font-light">Cart is empty..</h3>
+                                <button
+                                    className="button "
+                                    onClick={() => navigate("/products")}
+                                >
+                                    Click here to shop now
+                                </button>
+                            </>
+                        )
+                    )}
+                </div>
             </div>
         </>
     );

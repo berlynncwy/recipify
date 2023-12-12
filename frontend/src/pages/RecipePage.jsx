@@ -8,6 +8,7 @@ import {
     ListGroup,
     Card,
     Button,
+    Spinner,
 } from "react-bootstrap";
 
 import RecipeItem from "../components/RecipeItem";
@@ -20,8 +21,10 @@ const RecipePage = () => {
     const { id: recipeId } = useParams();
     const { isFav, onFavToggle } = useFav();
     const [keyword, setKeyword] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const refresh = () => {
+        setLoading(true);
         fetch("api/recipes/")
             .then((res) => {
                 return res.json();
@@ -33,7 +36,8 @@ const RecipePage = () => {
             })
             .catch((err) => {
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     };
 
     useEffect(refresh, []);
@@ -45,6 +49,7 @@ const RecipePage = () => {
 
     const searchHandler = () => {
         if (keyword != null) {
+            setLoading(true);
             fetch(
                 window.location.origin +
                     "/api/recipes/getrecipe/?keyword=" +
@@ -60,13 +65,14 @@ const RecipePage = () => {
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                })
+                .finally(() => setLoading(false));
         }
     };
     return (
         <>
             <h1>Recipes</h1>
-            <Container>
+            <Container className="min-h-screen">
                 <Row className="gap-y-11 justify-center mb-5">
                     <Row className="justify-center mb-4 items-center">
                         Search recipe:
@@ -91,6 +97,13 @@ const RecipePage = () => {
                             Reset
                         </button>
                     </Row>
+                    {loading ? (
+                        <Spinner />
+                    ) : (
+                        recipe.length == 0 && (
+                            <p className="italic">No recipe found.</p>
+                        )
+                    )}
                     {recipe.map(
                         ({
                             _id,

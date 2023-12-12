@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Spinner } from "react-bootstrap";
 import RecipeItem from "../components/RecipeItem";
 import { useFav } from "../hooks/useFav";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -8,6 +8,7 @@ const FavouritePage = () => {
     const [fav, setFav] = useState([]);
     const { user } = useAuthContext();
     const { isFav, onFavToggle } = useFav();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (user == null) return;
@@ -18,6 +19,7 @@ const FavouritePage = () => {
                 Authorization: `Bearer ${user.token}`,
             },
         };
+        setLoading(true);
         fetch(
             window.location.origin + "/api/recipes/favourites/recipes",
             requestOption
@@ -33,12 +35,22 @@ const FavouritePage = () => {
             })
             .catch((err) => {
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     }, [user]);
     return (
         <>
             <h1>Favourites ♥︎</h1>
             <Container>
+                <div className="flex justify-center">
+                    {loading ? (
+                        <Spinner />
+                    ) : (
+                        fav.length == 0 && (
+                            <p className="italic">No favourites.</p>
+                        )
+                    )}
+                </div>
                 <Row className="gap-5 justify-start mb-5 min-h-screen">
                     {fav.map(
                         ({

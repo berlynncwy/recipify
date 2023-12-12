@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const OrderPage = () => {
+    const [loading, setLoading] = useState(true);
     const url = window.location.origin + "/api/payment/orders";
     const { user } = useAuthContext();
     const [objects, setObjects] = useState([]);
 
     const refresh = () => {
         if (user == null) return;
+        setLoading(true);
         const requestOption = {
             method: "GET",
             headers: {
@@ -22,7 +24,8 @@ const OrderPage = () => {
             .then((json) => setObjects(json))
             .catch((err) => {
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     };
 
     useEffect(refresh, [user]);
@@ -75,10 +78,16 @@ const OrderPage = () => {
                         </Col>
                     </Row>
                 )}
-                {objects.length == 0 && (
+                {loading ? (
                     <div className="flex justify-center">
-                        You have not made any orders yet.{" "}
+                        <Spinner />
                     </div>
+                ) : (
+                    objects.length == 0 && (
+                        <div className="flex justify-center">
+                            You have not made any orders yet.{" "}
+                        </div>
+                    )
                 )}
                 {objects.map((object) => {
                     const { order, session } = object;

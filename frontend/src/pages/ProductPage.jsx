@@ -1,13 +1,15 @@
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Spinner } from "react-bootstrap";
 import { useEffect, useState } from "react";
 
 import ProductItem from "../components/ProductItem";
 
 const ProductPage = () => {
-    const [product, setProduct] = useState([]);
+    const [products, setProducts] = useState([]);
     const [keyword, setKeyword] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const refresh = () => {
+        setLoading(true);
         fetch("api/products")
             .then((res) => {
                 return res.json();
@@ -15,13 +17,14 @@ const ProductPage = () => {
             .then((res) => {
                 console.log("======success=======");
                 console.log(res);
-                setProduct(res);
+                setProducts(res);
                 setKeyword("");
             })
             .catch((err) => {
                 console.log("======failure=======");
                 console.log(err);
-            });
+            })
+            .finally(() => setLoading(false));
     };
 
     useEffect(refresh, []);
@@ -33,6 +36,7 @@ const ProductPage = () => {
 
     const searchHandler = () => {
         if (keyword != null) {
+            setLoading(true);
             fetch(
                 window.location.origin +
                     "/api/products/getproduct/?keyword=" +
@@ -44,17 +48,18 @@ const ProductPage = () => {
                 .then((res) => {
                     console.log("======success=======");
                     console.log(res);
-                    setProduct(res);
+                    setProducts(res);
                 })
                 .catch((err) => {
                     console.log(err);
-                });
+                })
+                .finally(() => setLoading(false));
         }
     };
     return (
         <>
             <h1>Products</h1>
-            <Container className="mb-5">
+            <Container className="mb-5 min-h-screen">
                 <Row className="justify-center mb-4 items-center">
                     Search product:
                     <input
@@ -78,25 +83,36 @@ const ProductPage = () => {
                         Reset
                     </button>
                 </Row>
+                <div className="flex justify-center">
+                    {loading ? (
+                        <Spinner />
+                    ) : (
+                        products.length == 0 && (
+                            <p className="italic">No product found.</p>
+                        )
+                    )}
+                </div>
                 <Row className="gap-y-11 justify-start ">
-                    {product.map(({ _id, name, unitDetails, price, image }) => (
-                        <Col
-                            key={_id}
-                            sm={12}
-                            md={6}
-                            lg={4}
-                            xl={3}
-                            className="gap-0"
-                        >
-                            <ProductItem
-                                _id={_id}
-                                name={name}
-                                unitDetails={unitDetails}
-                                price={price}
-                                image={image}
-                            />
-                        </Col>
-                    ))}
+                    {products.map(
+                        ({ _id, name, unitDetails, price, image }) => (
+                            <Col
+                                key={_id}
+                                sm={12}
+                                md={6}
+                                lg={4}
+                                xl={3}
+                                className="gap-0"
+                            >
+                                <ProductItem
+                                    _id={_id}
+                                    name={name}
+                                    unitDetails={unitDetails}
+                                    price={price}
+                                    image={image}
+                                />
+                            </Col>
+                        )
+                    )}
                 </Row>
             </Container>
         </>

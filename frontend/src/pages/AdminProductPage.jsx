@@ -153,6 +153,9 @@ const AdminProductPage = () => {
                                 Reset
                             </button>
                         </div>
+                        {products.length == 0 && (
+                            <p className="italic">No products found.</p>
+                        )}
                         <div className="flex flex-wrap ">
                             {products.map((product) => {
                                 return (
