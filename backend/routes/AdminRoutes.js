@@ -8,6 +8,8 @@ import Product from "../models/ProductModel.js";
 import Supplier from "../models/SupplierModel.js";
 import Order from "../models/OrderModel.js";
 import stripeInit from "stripe";
+import mongoose from "mongoose";
+
 
 const router = express.Router();
 const domain = "http://localhost:5173";
@@ -65,7 +67,10 @@ router.get("/getsupplier", asyncHandler(async (req, res) => {
 // get order by keyword
 router.get("/getorder", asyncHandler(async (req, res) => {
     const keyword = req.query.keyword;
-
+    if (!mongoose.Types.ObjectId.isValid(keyword)) {
+        res.status(404).json([]);
+        return;
+    }
     let orders = [];
     let userCustomerMap = new Map();
 
@@ -82,7 +87,7 @@ router.get("/getorder", asyncHandler(async (req, res) => {
         console.log(userCustomerMap);
     } catch (err) {
         console.warn(err);
-        res.status(500).json({ message: "Something went wrong. Please try again later" });
+        res.status(500).json([]);
         return;
     }
 
@@ -101,7 +106,7 @@ router.get("/getorder", asyncHandler(async (req, res) => {
             ret.push({ customer, order, session });
         } catch (err) {
             console.warn(err);
-            res.status(500).json({ message: "Something went wrong. Please try again later" });
+            res.status(500).json([]);
         }
     }
     console.log(ret);
