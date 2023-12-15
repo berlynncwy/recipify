@@ -304,12 +304,12 @@ const SingleRecipePage = () => {
                                             ${product.price.toFixed(2)}
                                         </div>
                                         <div>
-                                            <QuantityButton
+                                            {/* <QuantityButton
                                                 value={quantity}
                                                 setValue={setQuantity}
                                                 min={0}
                                                 max={10}
-                                            />
+                                            /> */}
                                         </div>
                                         <div>
                                             <button

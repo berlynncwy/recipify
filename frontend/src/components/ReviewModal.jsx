@@ -20,7 +20,7 @@ const ReviewModal = ({ review, recipeId }) => {
     const submitHandler = () => {
         console.log(rating);
         console.log(comment);
-        if (comment != "") {
+        if (comment != "" && rating != 0) {
             alert("Review has been submitted. Thank you!");
             handleClose();
             if (user == null) return;
@@ -35,7 +35,7 @@ const ReviewModal = ({ review, recipeId }) => {
             const url = window.location.origin + "/api/recipes/add-review";
             fetch(url, requestOption);
         } else {
-            alert("Please leave a comment.");
+            alert("Please leave a comment and rating. Minimum rating is 1.");
         }
     };
 
