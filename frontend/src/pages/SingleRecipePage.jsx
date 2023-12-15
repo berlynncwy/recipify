@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Row, Col, Button, Image, Spinner } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -61,10 +61,7 @@ const SingleRecipePage = () => {
     }, []);
 
     const existingReview = useMemo(
-        () =>
-            user
-                ? recipe.review.find((rev) => rev.user == user?._id)
-                : undefined,
+        () => recipe.review.find((rev) => rev.user == user._id),
         [recipe, user]
     );
     console.log(existingReview);
