@@ -297,7 +297,7 @@ const SingleRecipePage = () => {
                                         className="w-40 h-40 border-1 mr-3"
                                     />
                                     <div className="flex-col">
-                                        <div className="pr-5 recipe-title pt-2">
+                                        <div className="details-text font-bold pt-2">
                                             {product.name}
                                         </div>
                                         <div className="details-text">

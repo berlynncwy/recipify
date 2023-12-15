@@ -73,7 +73,43 @@ const Signup = () => {
                 })
                 .then((json) => {
                     if (json == null) {
-                        // good, go and create
+                        const requestOptions = {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                ...customerDetails,
+                            }),
+                        };
+                        fetch("api/user/signup", requestOptions)
+                            .then((res) => {
+                                // save user and email into local storage
+                                if (res.ok) {
+                                    res.json().then((json) => {
+                                        console.log(json);
+                                        localStorage.setItem(
+                                            "user",
+                                            JSON.stringify(json)
+                                        );
+                                        dispatch({
+                                            type: "login",
+                                            payload: json,
+                                        });
+                                        setCustomerDetails({});
+                                        alert("Welcome to the Recipify!");
+                                        navigate("/recipes");
+                                    });
+
+                                    console.log("======success=======");
+                                    console.log(res);
+                                } else {
+                                    setSignupError(true);
+                                    setErrorMsg(res.error);
+                                }
+                            })
+                            .catch((err) => {
+                                console.log("======failure=======");
+                                console.log(err);
+                            });
                     } else {
                         setSignupError(true);
                         emailExistAlready = true;
@@ -84,45 +120,6 @@ const Signup = () => {
                     console.log("======failure=======");
                     console.log(err);
                 });
-            console.log("Success");
-
-            if (emailExistAlready == false) {
-                console.log("Imhere");
-                const requestOptions = {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        ...customerDetails,
-                    }),
-                };
-                fetch("api/user/signup", requestOptions)
-                    .then((res) => {
-                        // save user and email into local storage
-                        if (res.ok) {
-                            res.json().then((json) => {
-                                console.log(json);
-                                localStorage.setItem(
-                                    "user",
-                                    JSON.stringify(json)
-                                );
-                                dispatch({ type: "login", payload: json });
-                                setCustomerDetails({});
-                                alert("Welcome to the Recipify!");
-                                navigate("/recipes");
-                            });
-
-                            console.log("======success=======");
-                            console.log(res);
-                        } else {
-                            setSignupError(true);
-                            setErrorMsg(res.error);
-                        }
-                    })
-                    .catch((err) => {
-                        console.log("======failure=======");
-                        console.log(err);
-                    });
-            }
         }
     };
     const currentDate = new Date().toISOString().split("T")[0];
@@ -132,37 +129,31 @@ const Signup = () => {
         setCustomerDetails((prev) => {
             return { ...prev, firstName: event.target.value };
         });
-        console.log(customerDetails);
     };
     const lastnameInputHandler = (event) => {
         setCustomerDetails((prev) => {
             return { ...prev, lastName: event.target.value };
         });
-        console.log(customerDetails);
     };
     const birthdayInputHandler = (event) => {
         setCustomerDetails((prev) => {
             return { ...prev, dob: event.target.value };
         });
-        console.log(customerDetails);
     };
     const emailInputHandler = (event) => {
         setCustomerDetails((prev) => {
             return { ...prev, email: event.target.value };
         });
-        console.log(customerDetails);
     };
     const mobileInputHandler = (event) => {
         setCustomerDetails((prev) => {
             return { ...prev, mobile: event.target.value };
         });
-        console.log(customerDetails);
     };
     const passwordInputHandler = (event) => {
         setCustomerDetails((prev) => {
             return { ...prev, password: event.target.value };
         });
-        console.log(customerDetails);
     };
     const confirmPasswordInputHandler = (event) => {
         setCustomerDetails((prev) => {
